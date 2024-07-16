@@ -11,8 +11,11 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 # from models import Person
 
+# app = Flask(__name__)
+# CORS(app)
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
@@ -27,6 +30,10 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+# Configuración de CORS
+CORS(app, resources={r"/*": {"origins": "*"}})  # Permite todas las solicitudes desde cualquier origen
+
 # Other configuration 
 setup_admin(app)  # add the admin
 setup_commands(app)  # add the admin

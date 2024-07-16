@@ -12,7 +12,7 @@ const PasswordResetRequest = () => {
         const message = await actions.requestPasswordReset(email);
         if (message) {
             alert(message);
-            navigate('/login');
+            navigate('/login'); // Navega a la página de login si el mensaje es exitoso
         } else {
             alert('Something went wrong, please try again.');
         }

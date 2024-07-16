@@ -11,6 +11,8 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from api.models import db, Users, Movies, Series, Favorites
 from flask_sqlalchemy import SQLAlchemy
+import requests
+import os
 
 
 api = Blueprint('api', __name__)
@@ -141,7 +143,7 @@ def get_user_favorites():
     favorite_series = db.session.execute(db.select(Favorites).join(Series).filter(Favorites.user_id == current_user_id)).scalars()
     response_body['favorite_movies'] = [row.serialize() for row in favorite_movies]
     response_body['favorite_series'] = [row.serialize() for row in favorite_series]
-    response_body['message'] = "Favoritos del usuario"
+    response_body['message'] = "Los favs del usuario"
     return jsonify(response_body), 200
 
 
@@ -199,36 +201,106 @@ def delete_favorite_series(series_id):
     return jsonify(response_body), 404
 
 
-@api.route('/request-password-reset', methods=['POST'])
-def request_password_reset():
-    email = request.json.get('email')
-    user = db.session.query(Users).filter_by(email=email).first()
-    if not user:
-        return jsonify({"message": "Email not found"}), 404
+# @api.route('/request-password-reset', methods=['POST'])
+# def request_password_reset():
+#     response_body = {}
+#     try:
+#         email = request.json.get('email')
+#         if not email:
+#             response_body['message'] = "Email is required"
+#             return jsonify(response_body), 400
 
-    # Generar un token de un solo uso con expiración
-    token = user.get_reset_password_token()
+#         user = db.session.query(Users).filter_by(email=email).first()
+#         if not user:
+#             response_body['message'] = "Email not found"
+#             return jsonify(response_body), 404
+        
+#         token = user.generate_reset_password_token()
+#         reset_link = url_for('api.reset_password', token=token, _external=True)
+        
+#         msg = Message(
+#             "Reset Your Password",
+#             sender=os.getenv("MAIL_USERNAME"),
+#             recipients=[email]
+#         )
+#         msg.body = f"Please use the following link to reset your password: {reset_link}"
+#         mail.send(msg)
 
-    # Enviar email
-    msg = Message(
-        "Reset Your Password",
-        sender=app.config['MAIL_USERNAME'],
-        recipients=[email]
-    )
-    reset_link = url_for('reset_password', token=token, _external=True)
-    msg.body = f"Please use the following link to reset your password: {reset_link}"
-    mail.send(msg)
-
-    return jsonify({"message": "Email sent for password reset"}), 200
+#         response_body['message'] = "Email sent for password reset"
+#         return jsonify(response_body), 200
+#     except Exception as e:
+#         response_body['message'] = f"Error processing request: {str(e)}"
+#         return jsonify(response_body), 500
 
 
-@api.route('/reset-password/<token>', methods=['POST'])
-def reset_password(token):
-    user = Users.verify_reset_password_token(token)
-    if not user:
-        return jsonify({"message": "Invalid or expired token"}), 400
+# @api.route('/reset-password/<token>', methods=['POST'])
+# def reset_password(token):
+#     response_body = {}
 
-    password = request.json.get('password')
-    user.set_password(password)
-    db.session.commit()
-    return jsonify({"message": "Password has been reset"}), 200
+
+
+# @api.route('/reset-password/<token>', methods=['POST'])
+# def reset_password(token):
+#     user = Users.verify_reset_password_token(token)
+#     if not user:
+#         return jsonify({"message": "Invalid or expired token"}), 400
+
+#     password = request.json.get('password')
+#     user.set_password(password)
+#     db.session.commit()
+#     return jsonify({"message": "Password has been reset"}), 200
+
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+@api.route('/get-recommendations', methods=['POST'])
+def get_recommendations():
+    response_body = {}
+    
+    
+    data = request.json
+    prompt = data.get('prompt', 'Mi pregunta sobre cine')
+    
+    
+    openai_url = "https://api.openai.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    openai_data = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 100
+    }
+
+    try:
+        
+        response = requests.post(openai_url, headers=headers, json=openai_data)
+        response.raise_for_status()  
+        recommendations = response.json().get('choices', [])
+        
+       
+        response_body['recommendations'] = recommendations
+        return jsonify(response_body), 200
+    except requests.exceptions.HTTPError as e:
+        response_body['message'] = f'Error fetching recommendations from OpenAI: {str(e)}'
+        return jsonify(response_body), 500
+
+
+TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+@api.route('/search_movie', methods=['GET'])
+def search_movie():
+    query = request.args.get('query')
+    
+    if not query:
+        return jsonify({"error": "Tienes que poner el título de una peli."}), 400
+
+ 
+    url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={query}"
+    
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return jsonify(response.json()), 200
+    else:
+        return jsonify({"error": "Error al contactar con la API."}), response.status_code

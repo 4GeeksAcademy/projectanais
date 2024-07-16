@@ -94,5 +94,7 @@ class Favorites(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'movie_id': self.movie_id,
-            'series_id': self.series_id
+            'movie_title': self.movie.title if self.movie else 'N/A',
+            'series_id': self.series_id,
+            'series_title': self.series.title if self.series else 'N/A'
         }

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate, Link } from "react-router-dom"; // Importa Link de react-router-dom
+import { useNavigate, Link } from "react-router-dom"; 
 
  const Login = () => {
   const { actions } = useContext(Context);
@@ -47,7 +47,7 @@ import { useNavigate, Link } from "react-router-dom"; // Importa Link de react-r
             value={password} onChange={handlePassword} />
         </div>
         <div className="mb-3 text-center">
-          <Link to="/reset-password" className="text-decoration-none">¿Olvidaste tu contraseña?</Link>  {/* Enlace para resetear contraseña */}
+          <Link to="/reset-password" className="text-decoration-none">¿Olvidaste tu contraseña?</Link>  
         </div>
         <button type="submit" className="btn btn-primary mt-3">Submit</button>
         <button type="button" className="btn btn-secondary ms-3 mt-3"

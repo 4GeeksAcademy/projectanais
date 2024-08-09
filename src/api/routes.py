@@ -12,7 +12,7 @@ from flask_jwt_extended import JWTManager
 from api.models import db, Users, Movies, Series, Favorites
 from flask_sqlalchemy import SQLAlchemy
 import requests
-import os
+import os, json
 
 
 api = Blueprint('api', __name__)
@@ -256,34 +256,72 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 @api.route('/get-recommendations', methods=['POST'])
 def get_recommendations():
     response_body = {}
-    
-    
     data = request.json
     prompt = data.get('prompt', 'Mi pregunta sobre cine')
-    
-    
+    exclude = data.get('exclude', [])
+
     openai_url = "https://api.openai.com/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
     }
+
+    openai_prompt = f"""Genera múltiples recomendaciones de películas o series en castellano en el siguiente formato JSON:
+    [
+      {{
+        "title": "Nombre de la película o serie",
+        "imdb_rating": "Calificación de IMDb",
+        "platforms": "Plataformas donde se puede ver",
+        "poster_url": "URL del póster",
+        "duration": "Duración total en minutos",
+        "description": "Breve descripción"
+      }},
+      {{
+        "title": "Nombre de la película o serie",
+        "imdb_rating": "Calificación de IMDb",
+        "platforms": "Plataformas donde se puede ver",
+        "poster_url": "URL del póster",
+        "duration": "Duración total en minutos",
+        "description": "Breve descripción"
+      }},
+      {{
+        "title": "Nombre de la película o serie",
+        "imdb_rating": "Calificación de IMDb",
+        "platforms": "Plataformas donde se puede ver",
+        "poster_url": "URL del póster",
+        "duration": "Duración total en minutos",
+        "description": "Breve descripción"
+      }}
+    ]
+    {prompt}
+    No incluyas las siguientes películas o series: {', '.join(exclude)}"""
+
     openai_data = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 100
+        "messages": [{"role": "user", "content": openai_prompt}],
+        "max_tokens": 1000  # Incrementamos el número de tokens
     }
 
     try:
-        
         response = requests.post(openai_url, headers=headers, json=openai_data)
-        response.raise_for_status()  
+        response.raise_for_status()
         recommendations = response.json().get('choices', [])
         
-       
-        response_body['recommendations'] = recommendations
+        print("Response from OpenAI:", recommendations)  # Add this line to log the response
+
+        # Procesar las recomendaciones y extraer el contenido JSON
+        all_recommendations = json.loads(recommendations[0]['message']['content'])
+        filtered_recommendations = [rec for rec in all_recommendations if rec['title'] not in exclude]
+
+        print("Filtered Recommendations:", filtered_recommendations)  # Add this line to log the filtered recommendations
+
+        response_body['recommendations'] = filtered_recommendations
         return jsonify(response_body), 200
     except requests.exceptions.HTTPError as e:
         response_body['message'] = f'Error fetching recommendations from OpenAI: {str(e)}'
+        return jsonify(response_body), 500
+    except ValueError as e:
+        response_body['message'] = f'Error parsing recommendations: {str(e)}'
         return jsonify(response_body), 500
 
 

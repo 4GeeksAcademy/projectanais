@@ -1,19 +1,20 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate, Link } from "react-router-dom"; 
+import { useNavigate, Link } from "react-router-dom";
 
- const Login = () => {
+const Login = () => {
   const { actions } = useContext(Context);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState("");
 
-  const handleEmail = (event) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
-  const handlePassword = (event) => {
+  const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
@@ -24,35 +25,52 @@ import { useNavigate, Link } from "react-router-dom";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!isFormValid()) {
+      setError("Please fill in all fields.");
+      return;
+    }
     const data = await actions.login(email, password);  
     handleReset();
     if (data) {
-      navigate('/home'); 
+      navigate('/recommendation-wizard'); 
+    } else {
+      setError("Invalid login credentials");
     }
   };
 
+  const isFormValid = () => {
+    return email.trim() !== '' && password.trim() !== '';
+  };
+
   return (
-    <div className="container">
-      <h1 className="text-center">Sign in</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-          <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            value={email} onChange={handleEmail} />
-          <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+    <div className="auth-container">
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <h1>Log in</h1>
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={handleEmailChange} 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={handlePasswordChange} 
+          />
+          <Link to="/reset-password">Forgot your password?</Link>
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+      <div className="overlay-container">
+        <div className="overlay-panel">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start your journey with us</p>
+          <button className="ghost" onClick={() => navigate('/signup')}>Sign Up</button>
         </div>
-        <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-          <input type="password" className="form-control" id="exampleInputPassword1"
-            value={password} onChange={handlePassword} />
-        </div>
-        <div className="mb-3 text-center">
-          <Link to="/reset-password" className="text-decoration-none">¿Olvidaste tu contraseña?</Link>  
-        </div>
-        <button type="submit" className="btn btn-primary mt-3">Submit</button>
-        <button type="button" className="btn btn-secondary ms-3 mt-3"
-          onClick={handleReset}>Cancel</button>
-      </form>
+      </div>
     </div>
   );
 };

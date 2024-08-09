@@ -10,13 +10,17 @@ export const RecommendationWizard = () => {
   const [preferences, setPreferences] = useState({
     type: '',
     duration: '',
-    genre: '',
+    genres: [],
     specific: '',
   });
-  const [recommendations, setRecommendations] = useState([]);
 
-  const handleChange = (e) => {
-    setPreferences({ ...preferences, [e.target.name]: e.target.value });
+  const handleGenreChange = (genre) => {
+    setPreferences((prevPreferences) => {
+      const newGenres = prevPreferences.genres.includes(genre)
+        ? prevPreferences.genres.filter((g) => g !== genre)
+        : [...prevPreferences.genres, genre];
+      return { ...prevPreferences, genres: newGenres };
+    });
   };
 
   const nextStep = () => {
@@ -28,70 +32,138 @@ export const RecommendationWizard = () => {
   };
 
   const handleFetchRecommendations = async () => {
-    const prompt = `Quiero ver ${preferences.type}, que dure ${preferences.duration} minutos, del género ${preferences.genre}, con características ${preferences.specific}`;
+    const prompt = `Quiero ver ${preferences.type}, que dure ${preferences.duration}, del género ${preferences.genres.join(', ')}, con características ${preferences.specific}`;
     const recommendations = await actions.getRecommendations(prompt);
-    setRecommendations(recommendations);
-    setStep(5); // Avanzar al paso de resultados
+    navigate('/recommendations', { state: { recommendations } });
   };
 
-  switch (step) {
-    case 1:
-      return (
-        <div className="container mt-5">
-          <h2>¿Qué te gustaría ver hoy?</h2>
-          <button className="btn btn-primary m-2" onClick={() => { setPreferences({ ...preferences, type: 'película' }); nextStep(); }}>Película</button>
-          <button className="btn btn-primary m-2" onClick={() => { setPreferences({ ...preferences, type: 'serie' }); nextStep(); }}>Serie</button>
-          <button className="btn btn-primary m-2" onClick={() => { setPreferences({ ...preferences, type: 'cualquiera' }); nextStep(); }}>Me da igual</button>
+  return (
+    <div className="mt-5">
+      {step === 1 && (
+        <div className="wizard-step">
+          <h2 className="wizard-question">¿Qué te gustaría ver hoy?</h2>
+          <div className="wizard-options align-center">
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, type: 'película' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Película</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, type: 'serie' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Serie</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, type: 'cualquiera' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Me da igual</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+          </div>
         </div>
-      );
-    case 2:
-      return (
-        <div className="container mt-5">
-          <h2>¿Cuánto tiempo tienes?</h2>
-          <input type="text" name="duration" value={preferences.duration} onChange={handleChange} className="form-control mb-3" placeholder="Duración en minutos" />
-          <button className="btn btn-secondary m-2" onClick={prevStep}>Atrás</button>
-          <button className="btn btn-primary m-2" onClick={nextStep}>Siguiente</button>
+      )}
+      {step === 2 && (
+        <div className="wizard-step">
+          <h2 className="wizard-question">¿Cuánto tiempo tienes?</h2>
+          <div className="wizard-options align-center">
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, duration: 'menos de una hora' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Menos de una hora</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, duration: 'entre una hora y dos' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Entre una hora y dos</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+            <button className="uiverse" onClick={() => { setPreferences({ ...preferences, duration: 'más de dos horas' }); nextStep(); }}>
+              <div className="wrapper">
+                <span>Más de dos horas</span>
+                {[...Array(12).keys()].map((i) => (
+                  <div key={i} className={`circle circle-${i + 1}`}></div>
+                ))}
+              </div>
+            </button>
+          </div>
+          <div className="wizard-navigation">
+            <button className="btn-nav" onClick={prevStep}>Atrás</button>
+          </div>
         </div>
-      );
-    case 3:
-      return (
-        <div className="container mt-5">
-          <h2>¿Qué género te gusta?</h2>
-          <input type="text" name="genre" value={preferences.genre} onChange={handleChange} className="form-control mb-3" placeholder="Género" />
-          <button className="btn btn-secondary m-2" onClick={prevStep}>Atrás</button>
-          <button className="btn btn-primary m-2" onClick={nextStep}>Siguiente</button>
+      )}
+      {step === 3 && (
+        <div className="wizard-step">
+          <h2 className="wizard-question">¿Qué género te gusta?</h2>
+          <div className="wizard-options wizard-genres">
+            {['Acción', 'Comedia', 'Drama', 'Terror', 'Romance', 'Ciencia Ficción', 'Anime', 'Infantil'].map((genre) => (
+              <button
+                key={genre}
+                className={`uiverse ${preferences.genres.includes(genre) ? 'active' : ''}`}
+                onClick={() => handleGenreChange(genre)}
+              >
+                <div className="wrapper">
+                  <span>{genre}</span>
+                  {[...Array(12).keys()].map((i) => (
+                    <div key={i} className={`circle circle-${i + 1}`}></div>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
+          <div className="wizard-navigation">
+            <button className="btn-nav" onClick={prevStep}>Atrás</button>
+            <button className="btn-nav" onClick={nextStep}>Siguiente</button>
+          </div>
         </div>
-      );
-    case 4:
-      return (
-        <div className="container mt-5">
-          <h2>¿Algo específico que quieras ver?</h2>
-          <input type="text" name="specific" value={preferences.specific} onChange={handleChange} className="form-control mb-3" placeholder="Características específicas" />
-          <button className="btn btn-secondary m-2" onClick={prevStep}>Atrás</button>
-          <button className="btn btn-primary m-2" onClick={handleFetchRecommendations}>Obtener Recomendaciones</button>
+      )}
+      {step === 4 && (
+        <div className="wizard-step">
+          <h2 className="wizard-question">¿Algo específico que quieras ver?</h2>
+          <div className="InputContainer">
+            <input
+              type="text"
+              name="specific"
+              value={preferences.specific}
+              onChange={(e) => setPreferences({ ...preferences, specific: e.target.value })}
+              className="input"
+              placeholder="Características específicas"
+            />
+          </div>
+          <div className="wizard-options align-center">
+            {['Ganadora del Oscar', '+16', 'Basada en hechos reales', 'Con subtítulos en español'].map((specific) => (
+              <button
+                key={specific}
+                className={`uiverse ${preferences.specific.includes(specific) ? 'active' : ''}`}
+                onClick={() => setPreferences({ ...preferences, specific })}
+              >
+                <div className="wrapper">
+                  <span>{specific}</span>
+                  {[...Array(12).keys()].map((i) => (
+                    <div key={i} className={`circle circle-${i + 1}`}></div>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
+          <div className="wizard-navigation">
+            <button className="btn-nav" onClick={prevStep}>Atrás</button>
+            <button className="btn-nav" onClick={handleFetchRecommendations}>Obtener Recomendaciones</button>
+          </div>
         </div>
-      );
-    case 5:
-      return (
-        <div className="container mt-5">
-          <h2>Recomendaciones</h2>
-          {recommendations && recommendations.length > 0 ? (
-            <ul className="list-group">
-              {recommendations.map((rec, index) => (
-                <li key={index} className="list-group-item">
-                  {rec.message.content}
-                  <br />
-                  IMDb Rating: {rec.rating}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No se encontraron recomendaciones.</p>
-          )}
-          <button className="btn btn-primary mt-3" onClick={() => setStep(1)}>Reiniciar Búsqueda</button>
-        </div>
-      );
-    default:
-      return <div />;
-  }
+      )}
+    </div>
+  );
 };

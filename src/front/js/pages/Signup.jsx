@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext"; 
+import { Context } from "../store/appContext";
 
 export const Signup = () => {
   const { actions } = useContext(Context);
@@ -20,57 +20,54 @@ export const Signup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const errorResponse = await actions.signup(email, password, navigate); // Paso navigate q me permite cambiar la pag en la q esta el usuario
-
-    if (errorResponse) {
-      setError(errorResponse);
+    if (!isFormValid()) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    try {
+      const errorResponse = await actions.signup(email, password, navigate);
+      if (errorResponse) {
+        setError(errorResponse);
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
+  const isFormValid = () => {
+    return email.trim() !== '' && password.trim() !== '';
+  };
+
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-3 display-5">Registro</h2>
-              {error && (
-                <div className="alert alert-danger" role="alert">
-                  {error}
-                </div>
-              )}
-              <form onSubmit={handleSubmit}>
-                <div className="form-group mt-3 h6">
-                  <label htmlFor="email">Correo electrónico:</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    required
-                  />
-                </div>
-                <div className="form-group mt-3 h6">
-                  <label htmlFor="password">Contraseña:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                </div>
-                <div className="text-center">
-                  <button type="submit" className="btn btn-primary mt-5">Registrarse</button>
-                </div>
-              </form>
-            </div>
-          </div>
+    <div className="auth-container">
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <h1>Create Account</h1>
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmailChange}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      <div className="overlay-container">
+        <div className="overlay-panel">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button className="ghost" onClick={() => navigate('/login')}>Log In</button>
         </div>
       </div>
     </div>
   );
 };
-

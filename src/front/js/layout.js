@@ -19,38 +19,40 @@ import { Favorites } from "./pages/Favorites.jsx";
 import { Movies } from "./pages/Movies.jsx";
 import { RecommendationWizard } from "./pages/RecomendationWizard.jsx";
 import { Recommendations } from "./pages/Recommendations.jsx";
-
+import { About } from "./pages/About.jsx";
+import Auth from "./pages/Auth.jsx";
 
 //create your first component
 const Layout = () => {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const { store } = useContext(Context);
     const basename = process.env.BASENAME || "";
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 
     return (
-        <div>
+        <div className="app-container">
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <Routes>
-                        <Route element={store.isLoggedIn ? <Home /> : <HomeGuest />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<h1>Not found!</h1>} />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<PasswordResetRequest />} path="/reset-password" />
-                        <Route element={<PrivacyPolicy />} path="/privacy-policy" />
-                        <Route element={<Signup />} path="/signup" />
-                        <Route element={<Favorites />} path="/favorites" />
-                        <Route element={<Movies />} path="/movies" />
-                        <Route element={<RecommendationWizard />} path="/recommendation-wizard" />
-                        <Route element={<Recommendations />} path="/recommendations" />
+                    <div className="content">
+                        <Routes>
+                            <Route element={store.isLoggedIn ? <Home /> : <HomeGuest />} path="/" />
+                            <Route element={<Demo />} path="/demo" />
+                            <Route element={<Single />} path="/single/:theid" />
+                            <Route element={<h1>Not found!</h1>} />
+                            <Route element={<Login />} path="/login" />
+                            <Route element={<PasswordResetRequest />} path="/reset-password" />
+                            <Route element={<PrivacyPolicy />} path="/privacy-policy" />
+                            <Route element={<Signup />} path="/signup" />
+                            <Route element={<Favorites />} path="/favorites" />
+                            <Route element={<Movies />} path="/movies" />
+                            <Route element={<RecommendationWizard />} path="/recommendation-wizard" />
+                            <Route element={<Recommendations />} path="/recommendations" />
+                            <Route element={<About />} path="/about" />
 
 
-                    </Routes>
+                        </Routes>
+                    </div>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>

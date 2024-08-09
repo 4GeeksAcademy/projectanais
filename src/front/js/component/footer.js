@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   return (
-    <footer className="bg-light text-center text-lg-start">
-      <div className="text-center p-3">
-        © 2024 IANA: -
-        <Link to="/privacy-policy" className="text-dark">Privacy Policy</Link>
+    <footer className="footer bg-light text-center text-lg-start">
+      <div className="container-fluid">
+        <div className="text-center p-3">
+          © 2024 IANA. Todos los derechos reservados.
+        </div>
       </div>
     </footer>
   );
 };
-
-

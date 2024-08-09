@@ -16,7 +16,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			isLoggedIn: false,
 			favoriteMovies: [],
-			favoriteSeries: []
+			favoriteSeries: [],
+			viewedRecommendations: new Set()  // <-- Estoy usando un Set en lugar de una lista, esto es nuevo
 		},
 		actions: {
 			// Use getActions to call a function within a function
@@ -172,27 +173,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error adding favorite series:", response.status, response.statusText);
 				}
 			},
-			getRecommendations: async (prompt) => {
+			getRecommendations: async (prompt, exclude = []) => {
+				const store = getStore();
 				const url = process.env.BACKEND_URL + '/api/get-recommendations';
-				const token = sessionStorage.getItem('token'); // Si es necesario utilizar un token de autenticación
+				const token = sessionStorage.getItem('token');
 				const response = await fetch(url, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": `Bearer ${token}` // Si necesitas enviar un token de autenticación
-					},
-					body: JSON.stringify({ prompt })
+				  method: "POST",
+				  headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`
+				  },
+				  body: JSON.stringify({ prompt, exclude })
 				});
-			
+			  
 				if (!response.ok) {
-					console.log("Error al obtener recomendaciones:", response.status, response.statusText);
-					return;
+				  console.log("Error al obtener recomendaciones:", response.status, response.statusText);
+				  return [];
 				}
-			
+			  
 				const data = await response.json();
-				// Asegúrate de que data.recommendations contiene las recomendaciones correctas
-				return data.recommendations;
-			},
+				const newRecommendations = data.recommendations.filter(rec => !store.viewedRecommendations.has(rec.title));
+			  
+				// Actualizo el store con las nuevas recomendaciones vistas
+				const updatedViewedRecommendations = new Set([...store.viewedRecommendations, ...newRecommendations.map(rec => rec.title)]);
+				setStore({
+				  viewedRecommendations: updatedViewedRecommendations
+				});
+			  
+				console.log("New Recommendations:", newRecommendations);  // Add this line to log new recommendations
+			  
+				return newRecommendations;
+			  },
 		}
 	};
 };

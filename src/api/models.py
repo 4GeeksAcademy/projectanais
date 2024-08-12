@@ -80,21 +80,21 @@ class Series(db.Model):
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('Users', foreign_keys=[user_id])
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
-    movie = db.relationship('Movies', foreign_keys=[movie_id])
-    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
-    series = db.relationship('Series', foreign_keys=[series_id])
-
-    def __repr__(self):
-        return f'<Favorite User: {self.user_id} Movie: {self.movie_id} Series: {self.series_id}>'
-
+    movie_title = db.Column(db.String(255), nullable=False)
+    imdb_rating = db.Column(db.String(10), nullable=True)
+    platforms = db.Column(db.String(255), nullable=True)
+    poster_url = db.Column(db.String(255), nullable=False)
+    duration = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    
     def serialize(self):
         return {
             'id': self.id,
             'user_id': self.user_id,
-            'movie_id': self.movie_id,
-            'movie_title': self.movie.title if self.movie else 'N/A',
-            'series_id': self.series_id,
-            'series_title': self.series.title if self.series else 'N/A'
+            'movie_title': self.movie_title,
+            'imdb_rating': self.imdb_rating,
+            'platforms': self.platforms,
+            'poster_url': self.poster_url,
+            'duration': self.duration,
+            'description': self.description
         }

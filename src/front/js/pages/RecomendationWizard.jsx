@@ -38,7 +38,7 @@ export const RecommendationWizard = () => {
   };
 
   return (
-    <div className="mt-5">
+    <div className="container mt-5">
       {step === 1 && (
         <div className="wizard-step">
           <h2 className="wizard-question">¿Qué te gustaría ver hoy?</h2>
@@ -143,7 +143,7 @@ export const RecommendationWizard = () => {
             />
           </div>
           <div className="wizard-options align-center">
-            {['Ganadora del Oscar', '+16', 'Basada en hechos reales', 'Con subtítulos en español'].map((specific) => (
+            {['Ganadora del Oscar', '+16', 'Basada en hechos reales', 'Dirigida por'].map((specific) => (
               <button
                 key={specific}
                 className={`uiverse ${preferences.specific.includes(specific) ? 'active' : ''}`}

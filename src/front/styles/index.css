@@ -270,6 +270,14 @@ footer a {
   margin-left: 1em;
 }
 
+.recommendation-card .card-header button {
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+
 .recommendation-card .card-rating {
   position: absolute;
   top: 0.5em;
@@ -301,6 +309,11 @@ footer a {
 .wizard-question {
   color: var(--clr);
   margin-bottom: 20px;
+  position: relative;
+  text-align: center;
+  display: inline-block; /* Ajusta el ancho al contenido */
+  padding: 10px 20px; /* Añade un poco de espacio alrededor del texto */
+
 }
 
 .wizard-options {
@@ -343,6 +356,12 @@ footer a {
   box-shadow: none !important;
   touch-action: manipulation; /* Mejora la manipulación táctil */
   -webkit-tap-highlight-color: transparent; /* Elimina el color de resaltado al tocar el botón en dispositivos móviles */
+}
+
+.uiverse.active {
+  background-color: #FF4B2B; /* Color de fondo para el estado activo */
+  color: #FFFFFF; /* Color del texto cuando está activo */
+  box-shadow: 0 0 15px rgba(255, 75, 43, 0.8); /* Sombra para resaltar */
 }
 
 .uiverse:focus {

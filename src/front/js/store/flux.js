@@ -15,8 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			isLoggedIn: false,
-			favoriteMovies: [],
-			favoriteSeries: [],
+			favorites: JSON.parse(localStorage.getItem('favorites')) || [], // Cargo los favoritos desde localStorage
 			viewedRecommendations: new Set()  // <-- Estoy usando un Set en lugar de una lista, esto es nuevo
 		},
 		actions: {
@@ -122,57 +121,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 				sessionStorage.removeItem('token');
 				window.location.href = "/"; // Redirigir a la página de inicio
 			},
-			getFavorites: async () => {
-				const url = process.env.BACKEND_URL + '/api/users/favorites';
-				const token = sessionStorage.getItem('token');
-				const response = await fetch(url, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${token}`
-					}
-				});
-				if (!response.ok) {
-					console.error("Error fetching favorites:", response.status, response.statusText);
-					return;
-				}
-				const data = await response.json();
-				setStore({ favoriteMovies: data.favorite_movies, favoriteSeries: data.favorite_series });
-			},
+			// getFavorites: async () => {
+			// 	const url = process.env.BACKEND_URL + '/api/users/favorites';
+			// 	const token = sessionStorage.getItem('token');
+			// 	const response = await fetch(url, {
+			// 		method: 'GET',
+			// 		headers: {
+			// 			'Content-Type': 'application/json',
+			// 			'Authorization': `Bearer ${token}`
+			// 		}
+			// 	});
+			// 	if (!response.ok) {
+			// 		console.error("Error fetching favorites:", response.status, response.statusText);
+			// 		return;
+			// 	}
+			// 	const data = await response.json();
+			// 	setStore({ favoriteMovies: data.favorite_movies, favoriteSeries: data.favorite_series });
+			// },
+			  addFavorite: (favorite) => {
+				const store = getStore();
+				const updatedFavorites = [...store.favorites, favorite];
+				setStore({ favorites: updatedFavorites });
+				localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Asi los guardo en el localStorage
+			  },
+			  
+			  removeFavorite: (index) => {
+				const store = getStore();
+				const updatedFavorites = store.favorites.filter((_, i) => i !== index);
+				setStore({ favorites: updatedFavorites });
+				localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Actualizar en localStorage
+			  },
 
-			addFavoriteMovie: async (movieId) => {
-				const url = process.env.BACKEND_URL + `/api/users/favorite/movies/${movieId}`;
-				const token = sessionStorage.getItem('token'); // Otra vez el token de sessionStorage
-				const response = await fetch(url, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${token}` // El token de los huevos
-					}
-				});
-				if (!response.ok) {
-					console.error("Error adding favorite movie:", response.status, response.statusText);
-					return;
-				}
-				await getActions().getFavorites(); // Actualiza cuando termina la funcion q esta await
-			},
-			addFavoriteSeries: async (seriesId) => {
-				const url = process.env.BACKEND_URL + `/api/users/favorite/series/${seriesId}`;
-				const token = sessionStorage.getItem('token');
-				const response = await fetch(url, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${token}`
-					},
-					body: JSON.stringify({ series_id: seriesId })
-				});
-				if (response.ok) {
-					await getActions().getFavorites();
-				} else {
-					console.error("Error adding favorite series:", response.status, response.statusText);
-				}
-			},
 			getRecommendations: async (prompt, exclude = []) => {
 				const store = getStore();
 				const url = process.env.BACKEND_URL + '/api/get-recommendations';

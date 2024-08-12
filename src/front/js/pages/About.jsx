@@ -11,7 +11,7 @@ export const About = () => {
         <li>Recomendaciones personalizadas de películas y series basadas en tus preferencias.</li>
         <li>Integración con IMDb para calificaciones e información adicional.</li>
         <li>Opción para guardar tus películas y series favoritas.</li>
-        <li>Interfaz fácil de usar diseñada con Bootstrap.</li>
+        <li>¡Basta de perder el tiempo buscando qué ver, la respuesta esta aquí!</li>
       </ul>
       <p className="text-light">¡Gracias por elegir IANA! Disfruta de tus recomendaciones de películas y series.</p>
     </div>

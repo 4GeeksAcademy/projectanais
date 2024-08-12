@@ -42,10 +42,19 @@ export const Recommendations = () => {
     }
   };
 
+  const handleAlternativeRecommendations = async () => {
+    try {
+      const newRecommendations = await actions.getRecommendations("dame más recomendaciones", Array.from(store.viewedRecommendations));
+      navigate('/recommendations', { state: { recommendations: newRecommendations } });
+    } catch (error) {
+      console.error("Failed to fetch alternative recommendations:", error);
+    }
+  };
+
   return (
-    <div className="mt-5">
-      <h1 className="mb-4 text-center text-green">Recomendaciones</h1>
-      <p className="text-center">Según tus preferencias, te recomendamos:</p>
+    <div className="recommendations-container mt-5">
+      <h1 className="recommendations-title mb-4 text-center">Recomendaciones</h1>
+      <p className="text-center text-light">Según tus preferencias, te recomendamos:</p>
       {recommendations.length > 0 ? (
         <div className="row justify-content-center">
           {recommendations.map((rec, index) => (
@@ -56,26 +65,24 @@ export const Recommendations = () => {
                   <div className="title">
                     <h5>{rec.title}</h5>
                     <p>IMDb Rating: {rec.imdb_rating}</p>
+                    <button
+                      className={`btn-nav btn-sm ${isFavorite(rec.title) ? 'btn-success' : 'btn-warning'}`}
+                      onClick={() => handleToggleFavorite(rec)}
+                      onMouseEnter={() => setHoveredTitle(rec.title)}
+                      onMouseLeave={() => setHoveredTitle(null)}
+                    >
+                      {isFavorite(rec.title) && hoveredTitle === rec.title
+                        ? 'Eliminar de favoritos'
+                        : isFavorite(rec.title)
+                        ? '★ Añadido a favoritos'
+                        : '★ Añadir a favoritos'}
+                    </button>
                   </div>
                 </div>
                 <div className="card-details">
                   <p>Duración: {rec.duration} minutos</p>
                   <p>Disponible en: {rec.platforms}</p>
                   <p>{rec.description}</p>
-                </div>
-                <div className="card-footer">
-                  <button
-                    className={`btn btn-sm ${isFavorite(rec.title) ? 'btn-success' : 'btn-warning'}`}
-                    onClick={() => handleToggleFavorite(rec)}
-                    onMouseEnter={() => setHoveredTitle(rec.title)}
-                    onMouseLeave={() => setHoveredTitle(null)}
-                  >
-                    {isFavorite(rec.title) && hoveredTitle === rec.title
-                      ? 'Eliminar de favoritos'
-                      : isFavorite(rec.title)
-                      ? '★ Añadido a favoritos'
-                      : '★ Añadir a favoritos'}
-                  </button>
                 </div>
               </div>
             </div>
@@ -88,10 +95,16 @@ export const Recommendations = () => {
       )}
       <div className="text-center">
         <button 
-          className="btn btn-primary mt-3" 
+          className="btn-nav mt-3" 
           onClick={() => navigate('/recommendation-wizard')}
         >
           Volver a Buscar
+        </button>
+        <button 
+          className="btn-nav mt-3 ml-3" 
+          onClick={handleAlternativeRecommendations}
+        >
+          Recomendaciones Alternativas
         </button>
       </div>
     </div>

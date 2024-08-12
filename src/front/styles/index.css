@@ -228,6 +228,63 @@ footer a {
   padding: 20px;
 }
 
+/* Estilo para el título de las recomendaciones */
+.recommendations-title {
+  font-size: 28px;
+  color: var(--clr);
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+}
+
+.recommendations-title::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255, 94, 247, 1) 17.8%, rgba(2, 245, 255, 1) 100.2%);
+  filter: blur(15px);
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Botones de navegación en el contenedor de recomendaciones */
+.recommendations-container .btn-nav {
+  padding: 12px 20px;
+  min-width: 160px;
+  height: 52px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 1rem;
+  border: none;
+  position: relative;
+  background: #100720;
+  transition: 0.1s;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.recommendations-container .btn-nav::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255, 94, 247, 1) 17.8%, rgba(2, 245, 255, 1) 100.2%);
+  filter: blur(15px);
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.recommendations-container .btn-nav:active {
+  transform: scale(0.9) rotate(3deg);
+  background: radial-gradient(circle farthest-corner at 10% 20%, rgba(255, 94, 247, 1) 17.8%, rgba(2, 245, 255, 1) 100.2%);
+  transition: 0.5s;
+}
+
+/* Estilo para la tarjeta de recomendaciones */
 .recommendation-card {
   position: relative;
   width: 100%;
@@ -252,6 +309,7 @@ footer a {
   border-bottom-right-radius: 0;
 }
 
+/* Encabezado de la tarjeta */
 .recommendation-card .card-header {
   display: flex;
   justify-content: space-between;
@@ -268,16 +326,30 @@ footer a {
 .recommendation-card .card-header .title {
   font-size: 1.5em;
   margin-left: 1em;
+  white-space: nowrap; /* Evita que los títulos largos se desborden */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
 }
 
+/* Botón en el encabezado de la tarjeta */
 .recommendation-card .card-header button {
+  font-size: 0.5em; /* Reducir un poco el tamaño de la fuente */
   margin-top: 10px;
   display: block;
   width: 100%;
   text-align: center;
+  max-width: 150px;
+  white-space: normal; /* Permitir que el texto se divida en líneas */
+  padding: 10px; 
+  background-color: #FFE87C; /* Fondo amarillo para que coincida con el hover de la card */
+  color: black; /* Cambiar el color del texto para que sea legible sobre el fondo amarillo */
+  border: none; /* Opcional: eliminar el borde si no es necesario */
+  transition: background-color 0.3s ease-in-out;
 }
-
-
+.recommendation-card .card-header button:hover {
+  background-color: #FFD700; /* Un tono ligeramente diferente al hacer hover sobre el botón */
+}
+/* Calificación en la tarjeta */
 .recommendation-card .card-rating {
   position: absolute;
   top: 0.5em;
@@ -288,6 +360,7 @@ footer a {
   font-weight: bold;
 }
 
+/* Detalles de la tarjeta */
 .recommendation-card .card-details {
   max-height: 0;
   overflow: hidden;
@@ -300,6 +373,16 @@ footer a {
 
 .recommendation-card .card-details .details p {
   margin: 0.5em 0;
+  font-size: 0.9em; /* Ajusta el tamaño del texto de los detalles */
+  line-height: 1.4em;
+  max-height: 4.2em; /* Limita la altura de los párrafos */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+}
+
+/* Pie de la tarjeta */
+.recommendation-card .card-footer {
+  margin-top: auto; /* Asegura que el footer esté en la parte inferior */
 }
 
 .wizard-step {

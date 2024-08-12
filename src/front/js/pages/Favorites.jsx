@@ -1,8 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Context } from '../store/appContext';
 
 export const Favorites = () => {
   const { store, actions } = useContext(Context);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!store.token || store.token.split('.').length !== 3) {
+        console.error("Invalid JWT Token");
+        return;
+      }
+      await actions.getFavorites();
+    };
+
+    fetchFavorites(); // Llama a la función para obtener los favoritos cuando se monta el componente
+  }, [store.token]); // Dependencia en store.token para asegurar que se llama cuando el token esté disponible
 
   return (
     <div className="container mt-5">
@@ -19,11 +31,10 @@ export const Favorites = () => {
                   <p className="card-text">Duración: {favorite.duration} minutos</p>
                   <p className="card-text">Disponible en: {favorite.platforms}</p>
                   <p className="card-text">{favorite.description}</p>
-                  <button 
+                  <button
                     className="btn btn-danger"
-                    onClick={() => actions.removeFavorite(index)}
-                  >
-                    Eliminar de favoritos
+                    onClick={() => actions.deleteFavorite(favorite.id)}>
+                    Eliminar de Favoritos
                   </button>
                 </div>
               </div>

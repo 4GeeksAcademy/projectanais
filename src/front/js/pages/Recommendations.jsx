@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 
@@ -7,29 +7,38 @@ export const Recommendations = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { recommendations } = location.state || { recommendations: [] };
+  const [hoveredTitle, setHoveredTitle] = useState(null);
 
   const isFavorite = (title) => {
     return store.favorites.some(favorite => favorite.title === title);
   };
 
-  const handleToggleFavorite = (recommendation) => {
-    const isAlreadyFavorite = isFavorite(recommendation.title);
+  const handleToggleFavorite = async (recommendation) => {
+    const favoriteData = {
+      title: recommendation.title,
+      imdb_rating: recommendation.imdb_rating,
+      platforms: recommendation.platforms,
+      poster_url: recommendation.poster_url,
+      duration: recommendation.duration,
+      description: recommendation.description,
+    };
 
-    if (isAlreadyFavorite) {
-      // Eliminar de favoritos
-      const favoriteIndex = store.favorites.findIndex(fav => fav.title === recommendation.title);
-      actions.removeFavorite(favoriteIndex);
-    } else {
-      // Añadir a favoritos
-      const dataToSend = {
-        title: recommendation.title,
-        imdb_rating: recommendation.imdb_rating,
-        platforms: recommendation.platforms,
-        poster_url: recommendation.poster_url,
-        duration: recommendation.duration,
-        description: recommendation.description,
-      };
-      actions.addFavorite(dataToSend);
+    const token = store.token;
+    if (!token || token.split('.').length !== 3) {
+      console.error("Invalid JWT Token");
+      return;
+    }
+
+    try {
+      if (isFavorite(recommendation.title)) {
+        const favorite = store.favorites.find(fav => fav.title === recommendation.title);
+        await actions.deleteFavorite(favorite.id);
+      } else {
+        await actions.addFavorite(favoriteData);
+      }
+      console.log("Favorite added or removed successfully.");
+    } catch (error) {
+      console.error("Failed to add or remove favorite:", error);
     }
   };
 
@@ -48,19 +57,25 @@ export const Recommendations = () => {
                     <h5>{rec.title}</h5>
                     <p>IMDb Rating: {rec.imdb_rating}</p>
                   </div>
+                </div>
+                <div className="card-details">
+                  <p>Duración: {rec.duration} minutos</p>
+                  <p>Disponible en: {rec.platforms}</p>
+                  <p>{rec.description}</p>
+                </div>
+                <div className="card-footer">
                   <button
                     className={`btn btn-sm ${isFavorite(rec.title) ? 'btn-success' : 'btn-warning'}`}
                     onClick={() => handleToggleFavorite(rec)}
+                    onMouseEnter={() => setHoveredTitle(rec.title)}
+                    onMouseLeave={() => setHoveredTitle(null)}
                   >
-                    {isFavorite(rec.title) ? '★ Añadido a favoritos' : '★ Añadir a favoritos'}
+                    {isFavorite(rec.title) && hoveredTitle === rec.title
+                      ? 'Eliminar de favoritos'
+                      : isFavorite(rec.title)
+                      ? '★ Añadido a favoritos'
+                      : '★ Añadir a favoritos'}
                   </button>
-                </div>
-                <div className="card-details">
-                  <div className="details">
-                    <p>Duración: {rec.duration} minutos</p>
-                    <p>Disponible en: {rec.platforms}</p>
-                    <p>{rec.description}</p>
-                  </div>
                 </div>
               </div>
             </div>

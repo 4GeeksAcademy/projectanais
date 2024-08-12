@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
-from api.models import db, Users, Movies, Series, Favorites
+from api.models import db, Users, Favorites
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import os, json
@@ -19,6 +19,59 @@ api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+
+
+@api.route('/favorites', methods=['POST'])
+@jwt_required()
+def add_favorite():
+    data = request.get_json()
+
+    # Todos estos campos han de estar presentes en los datos que envio
+    title = data.get('title')
+    imdb_rating = data.get('imdb_rating')
+    platforms = data.get('platforms')
+    poster_url = data.get('poster_url')
+    duration = data.get('duration')
+    description = data.get('description')
+
+    #Lógica para crear y guardar el nuevo favorito
+    new_favorite = Favorites(
+        user_id=get_jwt_identity()['user_id'],
+        title=title,
+        imdb_rating=imdb_rating,
+        platforms=platforms,
+        poster_url=poster_url,
+        duration=duration,
+        description=description
+    )
+    db.session.add(new_favorite)
+    db.session.commit()
+
+    return jsonify(new_favorite.serialize()), 201
+
+
+@api.route('/favorites', methods=['GET'])
+@jwt_required()
+def get_favorites():
+    current_user_id = get_jwt_identity()['user_id']
+    favorites = Favorites.query.filter_by(user_id=current_user_id).all()
+    return jsonify([fav.serialize() for fav in favorites]), 200
+
+
+@api.route('/favorites/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorite(id):
+    current_user_id = get_jwt_identity()['user_id']
+    favorite = Favorites.query.filter_by(id=id, user_id=current_user_id).first()
+
+    if not favorite:
+        return jsonify({"msg": "Favorite not found"}), 404
+
+    db.session.delete(favorite)
+    db.session.commit()
+
+    return jsonify({"msg": "Favorite deleted"}), 200
+
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -134,66 +187,7 @@ def handle_user(user_id):
         return response_body, 200
 
 
-# Ruta para obtener los favoritos
-@api.route('/users/favorites', methods=['GET'])
-@jwt_required()
-def get_user_favorites():
-    current_user_id = get_jwt_identity()['user_id']
-    favorite_movies = db.session.query(Favorites).join(Movies).filter(Favorites.user_id == current_user_id, Favorites.movie_id.isnot(None)).all()
-    favorite_series = db.session.query(Favorites).join(Series).filter(Favorites.user_id == current_user_id, Favorites.series_id.isnot(None)).all()
-    
-    favorites = favorite_movies + favorite_series
 
-    response_body = {
-        'favorites': [fav.serialize() for fav in favorites],
-        'message': "Los favs del usuario"
-    }
-    return jsonify(response_body), 200
-
-# Ruta para añadir un favorito
-@api.route('/favorites', methods=['POST'])
-@jwt_required()
-def add_favorite():
-    data = request.get_json()
-    current_user_id = get_jwt_identity()['user_id']
-
-    # Verificar si es una película o una serie
-    if 'title' not in data or 'poster_url' not in data:
-        return jsonify({"msg": "Missing required fields"}), 400
-
-    # Crear el registro de favorito
-    new_favorite = Favorites(
-        user_id=current_user_id,
-        movie_title=data.get('title'),
-        imdb_rating=data.get('imdb_rating'),
-        platforms=data.get('platforms'),
-        poster_url=data.get('poster_url'),
-        duration=data.get('duration'),
-        description=data.get('description')
-    )
-
-    try:
-        db.session.add(new_favorite)
-        db.session.commit()
-        return jsonify({"msg": "Favorite added successfully"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"msg": f"Failed to add favorite: {str(e)}"}), 500
-
-# Ruta para eliminar un favorito
-@api.route('/favorites/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete_favorite(id):
-    current_user_id = get_jwt_identity()['user_id']
-    favorite = Favorites.query.filter_by(id=id, user_id=current_user_id).first()
-
-    if not favorite:
-        return jsonify({"msg": "Favorite not found"}), 404
-
-    db.session.delete(favorite)
-    db.session.commit()
-
-    return jsonify({"msg": "Favorite deleted"}), 200
 
 # @api.route('/request-password-reset', methods=['POST'])
 # def request_password_reset():

@@ -25,73 +25,24 @@ class Users(db.Model):
         }
 
 
-class Movies(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(), nullable=False)
-    duration = db.Column(db.Integer, nullable=False)
-    director = db.Column(db.String(), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    genre = db.Column(db.String(), nullable=False)
-    imdb_rating = db.Column(db.Float, nullable=True)
-    poster_url = db.Column(db.String(), nullable=True)
-
-    def __repr__(self):
-        return f'<Movie {self.title}>'
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'duration': self.duration,
-            'director': self.director,
-            'year': self.year,
-            'genre': self.genre,
-            'imdb_rating': self.imdb_rating,
-            'poster_url': self.poster_url
-        }
-
-
-class Series(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(), nullable=False)
-    seasons = db.Column(db.Integer, nullable=False)
-    director = db.Column(db.String(), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    genre = db.Column(db.String(), nullable=False)
-    imdb_rating = db.Column(db.Float, nullable=True)
-    poster_url = db.Column(db.String(), nullable=True)
-
-    def __repr__(self):
-        return f'<Series {self.title}>'
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'seasons': self.seasons,
-            'director': self.director,
-            'year': self.year,
-            'genre': self.genre,
-            'imdb_rating': self.imdb_rating,
-            'poster_url': self.poster_url
-        }
-    
-
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    movie_title = db.Column(db.String(255), nullable=False)
-    imdb_rating = db.Column(db.String(10), nullable=True)
-    platforms = db.Column(db.String(255), nullable=True)
-    poster_url = db.Column(db.String(255), nullable=False)
-    duration = db.Column(db.String(50), nullable=True)
-    description = db.Column(db.Text, nullable=True)
-    
+    user = db.relationship('Users', backref=db.backref('favorites', lazy=True))
+    title = db.Column(db.String(120), nullable=False)
+    imdb_rating = db.Column(db.String(10))
+    platforms = db.Column(db.String(120))
+    poster_url = db.Column(db.String(250))
+    duration = db.Column(db.String(50))
+    description = db.Column(db.Text)
+
+    def __repr__(self):
+        return f'<Favorite {self.title}>'
+
     def serialize(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
-            'movie_title': self.movie_title,
+            'title': self.title,
             'imdb_rating': self.imdb_rating,
             'platforms': self.platforms,
             'poster_url': self.poster_url,

@@ -15,7 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			isLoggedIn: false,
-			favorites: JSON.parse(localStorage.getItem('favorites')) || [], // Cargo los favoritos desde localStorage
+			favorites: [], 
 			viewedRecommendations: new Set()  // <-- Estoy usando un Set en lugar de una lista, esto es nuevo
 		},
 		actions: {
@@ -121,36 +121,101 @@ const getState = ({ getStore, getActions, setStore }) => {
 				sessionStorage.removeItem('token');
 				window.location.href = "/"; // Redirigir a la página de inicio
 			},
-			// getFavorites: async () => {
-			// 	const url = process.env.BACKEND_URL + '/api/users/favorites';
-			// 	const token = sessionStorage.getItem('token');
-			// 	const response = await fetch(url, {
-			// 		method: 'GET',
-			// 		headers: {
-			// 			'Content-Type': 'application/json',
-			// 			'Authorization': `Bearer ${token}`
-			// 		}
-			// 	});
-			// 	if (!response.ok) {
-			// 		console.error("Error fetching favorites:", response.status, response.statusText);
-			// 		return;
-			// 	}
-			// 	const data = await response.json();
-			// 	setStore({ favoriteMovies: data.favorite_movies, favoriteSeries: data.favorite_series });
-			// },
-			  addFavorite: (favorite) => {
+
+			 addFavorite: async (favoriteData) => {
 				const store = getStore();
-				const updatedFavorites = [...store.favorites, favorite];
-				setStore({ favorites: updatedFavorites });
-				localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Asi los guardo en el localStorage
-			  },
+			
+				// Verificar si el token está en el store
+				if (!store.token) {
+					console.error("Token is missing in the store.");
+					return;
+				}
+			
+				console.log("Data to send:", favoriteData);
+				console.log("JWT Token:", store.token); // Verificar si el token es el correcto
+			
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`
+						},
+						body: JSON.stringify(favoriteData)
+					});
+			
+					if (!response.ok) {
+						const errorData = await response.json();
+						console.error("Error adding favorite:", response.status, response.statusText, errorData);
+					} else {
+						const data = await response.json();
+						setStore({
+							favorites: [...store.favorites, data]
+						});
+						console.log("Favorite added successfully:", data);
+					}
+				} catch (error) {
+					console.error("Network or server error:", error);
+				}
+			},
+			getFavorites: async () => {
+				const store = getStore();
+				
+				if (!store.token || store.token.split('.').length !== 3) {
+					console.error("Invalid JWT Token:", store.token); // Verifica el token aquí
+					return;
+				}
+			
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`,
+						},
+					});
+			
+					if (!response.ok) {
+						console.error("Error fetching favorites:", response.status, response.statusText);
+						return;
+					}
+			
+					const data = await response.json();
+					setStore({ favorites: data });
+					console.log("Favorites fetched successfully:", data); // Verifica los datos aquí
+			
+				} catch (error) {
+					console.error("Failed to fetch favorites:", error);
+				}
+			},
 			  
-			  removeFavorite: (index) => {
+			deleteFavorite: async (id) => {
 				const store = getStore();
-				const updatedFavorites = store.favorites.filter((_, i) => i !== index);
-				setStore({ favorites: updatedFavorites });
-				localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Actualizar en localStorage
-			  },
+			
+				if (!store.token) {
+					console.error("Token is missing in the store.");
+					return;
+				}
+			
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites/${id}`, {
+						method: "DELETE",
+						headers: {
+							"Authorization": `Bearer ${store.token}`
+						}
+					});
+			
+					if (!response.ok) {
+						console.error("Error deleting favorite:", response.status, response.statusText);
+					} else {
+						const updatedFavorites = store.favorites.filter(favorite => favorite.id !== id);
+						setStore({ favorites: updatedFavorites });
+						console.log("Favorite deleted successfully.");
+					}
+				} catch (error) {
+					console.error("Network or server error:", error);
+				}
+			},
 
 			getRecommendations: async (prompt, exclude = []) => {
 				const store = getStore();

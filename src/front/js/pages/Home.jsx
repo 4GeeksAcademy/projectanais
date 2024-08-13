@@ -36,7 +36,7 @@ export const Home = () => {
       <h2 className="text-center text-light mt-5">Últimos Estrenos</h2>
       <div className="row flex-nowrap overflow-auto mb-5" style={{ whiteSpace: 'nowrap' }}>
         {latestReleases.map((movie, index) => (
-          <div key={index} className="col-10 col-sm-6 col-md-4 mb-4 d-inline-block">
+          <div key={index} className="col-10 col-sm-6 col-md-4 mb-4 d-inline-block mt-4">
             <div className="card h-100" style={{ borderRadius: '15px', minWidth: '200px' }}>
               <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt={movie.title} style={{ borderRadius: '15px 15px 0 0' }} />
               <div className="card-body d-flex flex-column">
@@ -49,7 +49,7 @@ export const Home = () => {
         ))}
       </div>
 
-      <h2 className="text-center text-light mt-5">Tendencias de la Semana</h2>
+      <h2 className="text-center text-light mt-5 mb-5">Tendencias de la Semana</h2>
       <div className="row flex-nowrap overflow-auto mb-5" style={{ whiteSpace: 'nowrap' }}>
         {trendingMovies.map((movie, index) => (
           <div key={index} className="col-10 col-sm-6 col-md-4 mb-4 d-inline-block">

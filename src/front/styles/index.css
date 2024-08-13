@@ -868,3 +868,11 @@ footer a {
   gap: 20px;
 }
 
+.welcome-section {
+  background: linear-gradient(135deg, #3c47a4, #f25e5e); /* Aqui hago el degradado */
+}
+
+.perso-section {
+  background: linear-gradient(135deg, #3c47a4, #f25e5e); /* Aqui hago el degradado */
+
+}

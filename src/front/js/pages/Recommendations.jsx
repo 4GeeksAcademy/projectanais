@@ -1,6 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
+
+// Función para obtener el póster desde TMDb
+const fetchPosterFromTMDb = async (title) => {
+  const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Asegúrate de reemplazar esto con tu clave de TMDb
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.results && data.results.length > 0) {
+      const posterPath = data.results[0].poster_path;
+      return `https://image.tmdb.org/t/p/w500${posterPath}`;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Failed to fetch poster from TMDb:", error);
+    return null;
+  }
+};
 
 export const Recommendations = () => {
   const { store, actions } = useContext(Context);
@@ -8,6 +27,7 @@ export const Recommendations = () => {
   const navigate = useNavigate();
   const { recommendations } = location.state || { recommendations: [] };
   const [hoveredTitle, setHoveredTitle] = useState(null);
+  const [posters, setPosters] = useState({}); // Estado para guardar los posters
 
   const isFavorite = (title) => {
     return store.favorites.some(favorite => favorite.title === title);
@@ -51,6 +71,18 @@ export const Recommendations = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchAllPosters = async () => {
+      const newPosters = {};
+      for (const rec of recommendations) {
+        const poster = await fetchPosterFromTMDb(rec.title); // Aquí usamos la función fetchPosterFromTMDb
+        newPosters[rec.title] = poster || rec.poster_url;  // Usa el póster de TMDb o el original si no se encuentra
+      }
+      setPosters(newPosters);
+    };
+    fetchAllPosters();
+  }, [recommendations]);
+
   return (
     <div className="recommendations-container mt-5">
       <h1 className="recommendations-title mb-4 text-center">Recomendaciones</h1>
@@ -61,7 +93,7 @@ export const Recommendations = () => {
             <div key={index} className="col-md-4 mb-4">
               <div className="recommendation-card">
                 <div className="card-header">
-                  <img src={rec.poster_url} alt={rec.title} />
+                  <img src={posters[rec.title]} alt={rec.title} />
                   <div className="title">
                     <h5>{rec.title}</h5>
                     <p>IMDb Rating: {rec.imdb_rating}</p>

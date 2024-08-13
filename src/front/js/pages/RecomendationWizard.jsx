@@ -130,9 +130,9 @@ export const RecommendationWizard = () => {
         </div>
       )}
       {step === 4 && (
-        <div className="wizard-step">
+        <div className="wizard-step m-5">
           <h2 className="wizard-question">¿Algo específico que quieras ver?</h2>
-          <div className="InputContainer">
+          <div className="InputContainer mt-3">
             <input
               type="text"
               name="specific"

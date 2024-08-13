@@ -248,6 +248,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  
 				return newRecommendations;
 			  },
+			  fetchPosterFromTMDb: async (title) => {
+                const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; 
+                const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data.results && data.results.length > 0) {
+                        const posterPath = data.results[0].poster_path;
+                        return `https://image.tmdb.org/t/p/w500${posterPath}`;
+                    } else {
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch poster from TMDb:", error);
+                    return null;
+                }
+            },
 		}
 	};
 };

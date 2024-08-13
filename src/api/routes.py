@@ -331,3 +331,15 @@ def get_recommendations():
 #     else:
 #         return jsonify({"error": "Error al contactar con la API."}), response.status_code
 
+TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+@api.route('/api/movie-details', methods=['POST'])
+def get_movie_details():
+    movie_title = request.json.get('title')
+    url = f'https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={movie_title}'
+    response = requests.get(url)
+    data = response.json()
+    if data['results']:
+        # Devuelve el primer resultado, que suele ser el más relevante
+        return jsonify(data['results'][0])
+    else:
+        return jsonify({'error': 'Movie not found'}), 404

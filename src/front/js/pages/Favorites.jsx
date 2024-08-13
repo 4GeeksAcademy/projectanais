@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
 
 export const Favorites = () => {
   const { store, actions } = useContext(Context);
+  const [posters, setPosters] = useState({});
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -11,10 +12,17 @@ export const Favorites = () => {
         return;
       }
       await actions.getFavorites();
+
+      const newPosters = {};
+      for (const favorite of store.favorites) {
+        const poster = await actions.fetchPosterFromTMDb(favorite.title);
+        newPosters[favorite.title] = poster || favorite.poster_url;  // Usa el póster de TMDb o el original si no se encuentra
+      }
+      setPosters(newPosters);
     };
 
     fetchFavorites();
-  }, [store.token]);
+  }, [store.token, store.favorites]);
 
   return (
     <div className="container mt-5">
@@ -23,7 +31,7 @@ export const Favorites = () => {
         {store.favorites.length > 0 ? (
           store.favorites.map((favorite, index) => (
             <div key={index} className="card m-3" style={{ width: '18rem' }}>
-              <img src={favorite.poster_url} className="card-img-top" alt={favorite.title} />
+              <img src={posters[favorite.title]} className="card-img-top mt-2" alt={favorite.title} />
               <div className="card-body d-flex flex-column justify-content-between">
                 <div>
                   <h5 className="card-title text-center">{favorite.title}</h5>

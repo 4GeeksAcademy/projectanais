@@ -79,7 +79,7 @@ export const Recommendations = () => {
                     </button>
                   </div>
                 </div>
-                <div className="card-details">
+                <div className="card-details m-3">
                   <p>Duración: {rec.duration} minutos</p>
                   <p>Disponible en: {rec.platforms}</p>
                   <p>{rec.description}</p>

@@ -313,20 +313,21 @@ def get_recommendations():
         return jsonify(response_body), 500
 
 
-TMDB_API_KEY = os.getenv('TMDB_API_KEY')
-@api.route('/search_movie', methods=['GET'])
-def search_movie():
-    query = request.args.get('query')
+# TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+# @api.route('/search_movie', methods=['GET'])
+# def search_movie():
+#     query = request.args.get('query')
     
-    if not query:
-        return jsonify({"error": "Tienes que poner el título de una peli."}), 400
+#     if not query:
+#         return jsonify({"error": "Tienes que poner el título de una peli."}), 400
 
  
-    url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={query}"
+#     url = f"https://api.themoviedb.org/3/search/movie?api_key={TMDB_API_KEY}&query={query}"
     
-    response = requests.get(url)
+#     response = requests.get(url)
 
-    if response.status_code == 200:
-        return jsonify(response.json()), 200
-    else:
-        return jsonify({"error": "Error al contactar con la API."}), response.status_code
+#     if response.status_code == 200:
+#         return jsonify(response.json()), 200
+#     else:
+#         return jsonify({"error": "Error al contactar con la API."}), response.status_code
+

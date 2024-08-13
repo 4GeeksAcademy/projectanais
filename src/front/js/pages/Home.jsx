@@ -1,21 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const Home = () => {
+  const [latestReleases, setLatestReleases] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
+
+  useEffect(() => {
+    const API_KEY = '26d0b6690b6ca551bd0a22504613e5a9'; 
+    
+    const fetchLatestReleases = async () => {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=es-ES&page=1`);
+        const data = await response.json();
+        setLatestReleases(data.results);
+      } catch (error) {
+        console.error('Error fetching latest releases:', error);
+      }
+    };
+
+    const fetchTrendingMovies = async () => {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=es-ES`);
+        const data = await response.json();
+        setTrendingMovies(data.results);
+      } catch (error) {
+        console.error('Error fetching trending movies:', error);
+      }
+    };
+
+    fetchLatestReleases();
+    fetchTrendingMovies();
+  }, []);
+
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="jumbotron text-center bg-light shadow-lg p-5 rounded">
-            <h1 className="display-4">¡Bienvenido a IANA!</h1>
-            <p className="lead">Descubre tu próxima película o serie favorita.</p>
-            <hr className="my-4" />
-            <p>Explora nuestra colección de recomendaciones personalizadas solo para ti. Ya sea que estés buscando una película para ver en solitario o una serie para maratonear, tenemos algo para todos.</p>
-            <div>
-              <a className="btn btn-primary btn-lg m-2" href="/movies" role="button">Buscar Películas</a>
-              <a className="btn btn-secondary btn-lg m-2" href="/series" role="button">Buscar Series</a>
+    <div className="container mt-5">
+      <h2 className="text-center text-light mt-5">Últimos Estrenos</h2>
+      <div className="row flex-nowrap overflow-auto mb-5" style={{ whiteSpace: 'nowrap' }}>
+        {latestReleases.map((movie, index) => (
+          <div key={index} className="col-10 col-sm-6 col-md-4 mb-4 d-inline-block">
+            <div className="card h-100" style={{ borderRadius: '15px', minWidth: '200px' }}>
+              <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt={movie.title} style={{ borderRadius: '15px 15px 0 0' }} />
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-center">{movie.title}</h5>
+                <p className="card-text text-center">Fecha de lanzamiento: {movie.release_date}</p>
+                <p className="card-text text-center">IMDb Rating: {movie.vote_average}</p>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
+
+      <h2 className="text-center text-light mt-5">Tendencias de la Semana</h2>
+      <div className="row flex-nowrap overflow-auto mb-5" style={{ whiteSpace: 'nowrap' }}>
+        {trendingMovies.map((movie, index) => (
+          <div key={index} className="col-10 col-sm-6 col-md-4 mb-4 d-inline-block">
+            <div className="card h-100" style={{ borderRadius: '15px', minWidth: '200px' }}>
+              <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt={movie.title} style={{ borderRadius: '15px 15px 0 0' }} />
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title text-center">{movie.title}</h5>
+                <p className="card-text text-center">Fecha de lanzamiento: {movie.release_date}</p>
+                <p className="card-text text-center">IMDb Rating: {movie.vote_average}</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

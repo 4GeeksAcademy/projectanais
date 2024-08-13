@@ -13,30 +13,30 @@ export const Favorites = () => {
       await actions.getFavorites();
     };
 
-    fetchFavorites(); // Llama a la función para obtener los favoritos cuando se monta el componente
-  }, [store.token]); // Dependencia en store.token para asegurar que se llama cuando el token esté disponible
+    fetchFavorites();
+  }, [store.token]);
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Mis Favoritos</h1>
-      <div className="row">
+      <h1 className="text-center text-light">Mis Favoritos</h1>
+      <div className="row flex-nowrap overflow-auto">
         {store.favorites.length > 0 ? (
           store.favorites.map((favorite, index) => (
-            <div key={index} className="col-md-4 mb-4">
-              <div className="card">
-                <img src={favorite.poster_url} className="card-img-top" alt={favorite.title} />
-                <div className="card-body">
-                  <h5 className="card-title">{favorite.title}</h5>
-                  <p className="card-text">IMDb Rating: {favorite.imdb_rating}</p>
-                  <p className="card-text">Duración: {favorite.duration} minutos</p>
-                  <p className="card-text">Disponible en: {favorite.platforms}</p>
+            <div key={index} className="card m-3" style={{ width: '18rem' }}>
+              <img src={favorite.poster_url} className="card-img-top" alt={favorite.title} />
+              <div className="card-body d-flex flex-column justify-content-between">
+                <div>
+                  <h5 className="card-title text-center">{favorite.title}</h5>
+                  <p className="card-text text-center">IMDb Rating: {favorite.imdb_rating}</p>
+                  <p className="card-text text-center">Duración: {favorite.duration} minutos</p>
+                  <p className="card-text text-center">Disponible en: {favorite.platforms}</p>
                   <p className="card-text">{favorite.description}</p>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => actions.deleteFavorite(favorite.id)}>
-                    Eliminar de Favoritos
-                  </button>
                 </div>
+                <button
+                  className="btn btn-warning mt-3 align-self-center"
+                  onClick={() => actions.deleteFavorite(favorite.id)}>
+                  Eliminar de Favoritos
+                </button>
               </div>
             </div>
           ))

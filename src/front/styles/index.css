@@ -832,5 +832,39 @@ footer a {
   width: 100%;
 }
 
+/* Título de la sección de Favoritos */
+/* Título de la sección de Favoritos */
+.favorites-title {
+  font-size: 28px;
+  color: var(--clr);
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+}
 
+.favorites-title::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255, 94, 247, 1) 17.8%, rgba(2, 245, 255, 1) 100.2%);
+  filter: blur(15px);
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+
+/* Contenedor con desplazamiento horizontal */
+.favorites-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 15px;
+}
+
+/* Contenedor para las tarjetas de favoritos */
+.favorites-cards-wrapper {
+  display: flex;
+  gap: 20px;
+}
 

@@ -51,6 +51,9 @@ const Layout = () => {
                             <Route element={<About />} path="/about" />
 
 
+
+
+
                         </Routes>
                     </div>
                     <Footer />

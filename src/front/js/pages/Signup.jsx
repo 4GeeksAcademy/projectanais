@@ -24,15 +24,14 @@ export const Signup = () => {
       setError("Please fill in all fields.");
       return;
     }
-    try {
-      const errorResponse = await actions.signup(email, password, navigate);
-      if (errorResponse) {
-        setError(errorResponse);
-      } else {
-        navigate('/login');
-      }
-    } catch (error) {
-      setError(error.message);
+
+    const errorResponse = await actions.signup(email, password, navigate);
+    if (errorResponse) {
+      setError(errorResponse);
+    } else {
+      // Guardo el token y redirijo al user dentr de la aplicación
+      await actions.login(email, password);
+      navigate('/recommendation-wizard');  
     }
   };
 

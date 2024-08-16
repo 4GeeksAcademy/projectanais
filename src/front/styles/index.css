@@ -37,8 +37,8 @@ a {
 
 button {
   border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
+  border: 1px solid #371aaf;
+  background-color: #632ea7;
   color: #FFFFFF;
   font-size: 12px;
   font-weight: bold;
@@ -97,7 +97,7 @@ input {
 
 @media (min-width: 768px) {
   .auth-container {
-    flex-direction: row; /* Cambia a row en pantallas grandes */
+    flex-direction: row; 
   }
 }
 
@@ -111,15 +111,15 @@ input {
 }
 
 .overlay-container {
-  background: linear-gradient(to right, #1f2860, #a175c4); /* Cambiado el color del fondo */
+  background: linear-gradient(to right, #1f2860, #a175c4); 
   color: #FFFFFF;
   text-align: center;
 }
 
 /* Botón principal en el formulario con degradado */
 button.form-btn {
-  background-image: linear-gradient(to right, #1f2860, #a175c4); /* Aplicar el degradado */
-  border: none; /* Sin borde adicional */
+  background-image: linear-gradient(to right, #1f2860, #a175c4); 
+  border: none; 
   color: #ffffff;
   padding: 12px 45px;
   font-size: 12px;
@@ -131,7 +131,7 @@ button.form-btn {
 }
 
 button.form-btn:hover {
-  background-color: #1f2860; /* Fondo sólido en el hover */
+  background-color: #1f2860; 
   color: #ffffff;
 }
 
@@ -156,8 +156,8 @@ button:focus, .btn-transparent:focus {
 
 .navbar {
   background: linear-gradient(333deg, rgba(10, 11, 11, 0.9976584383753502) 0%, rgba(31, 55, 77, 0.9976584383753502) 35%, rgba(2, 2, 2, 1) 100%);
-  color: #FFFFFF; /* Color de las letras */
-  align-items: center; /* Centra verticalmente los elementos dentro del navbar */
+  color: #FFFFFF; 
+  align-items: center; 
   display: flex;
   margin-top: 10px;
   height: 80px;
@@ -183,9 +183,9 @@ button:focus, .btn-transparent:focus {
 .navbar .navbar-brand:active,
 .navbar .navbar-brand:focus,
 .navbar .navbar-brand:hover {
-  background-color: #cccccc; /* Gris claro */
-  color: #000000; /* Color de texto oscuro para contraste */
-  border-radius: 4px; /* Opcional: Añadir un borde redondeado */
+  background-color: #cccccc; 
+  color: #000000; 
+  border-radius: 4px; 
 }
 
 /* Para asegurar que el texto del botón sea visible cuando está activo */
@@ -193,28 +193,28 @@ button:focus, .btn-transparent:focus {
 .navbar .navbar-toggler:active,
 .navbar .navbar-toggler-icon:focus,
 .navbar .navbar-toggler-icon:active {
-  background-color: #cccccc; /* Gris claro */
-  border-color: #cccccc; /* Asegurar que el borde también sea visible */
+  background-color: #cccccc; 
+  border-color: #cccccc; 
 }
 
 .navbar .navbar-brand,
 .navbar .navbar-nav {
-  margin-left: 15px;  /* Margen opcional para separar el logo y los enlaces de los bordes */
-  margin-right: 15px; /* Margen opcional para separar el logo y los enlaces de los bordes */
+  margin-left: 15px;  
+  margin-right: 15px; 
 }
 
 .navbar .navbar-brand {
-  font-size: 1.5rem; /* Ajusta el tamaño si es necesario */
-  line-height: 1.5; /* Ajusta la altura de línea para centrar mejor el texto */
+  font-size: 1.5rem; 
+  line-height: 1.5; 
 }
 .nav-item {
-  margin: 0 15px; /* Añadir margen entre los enlaces de navegación */
+  margin: 0 15px; /* Añado margen entre los enlaces de navegación */
 }
 
 footer {
   background-color: rgb(10, 11, 11);
   background: linear-gradient(333deg, rgba(10, 11, 11, 0.9976584383753502) 0%, rgba(31, 55, 77, 0.9976584383753502) 35%, rgba(2, 2, 2, 1) 100%);
-  color: #FFFFFF; /* Color de las letras */
+  color: #FFFFFF;
   font-size: 14px;
   bottom: 0;
   position: fixed;
@@ -352,24 +352,24 @@ footer a {
 .recommendation-card .card-header .title {
   font-size: 1.5em;
   margin-left: 1em;
-  white-space: nowrap; /* Evita que los títulos largos se desborden */
+  white-space: nowrap; /* Esto evita que los títulos largos se desborden!! */
   overflow: hidden;
-  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+  text-overflow: ellipsis; 
 }
 
-/* Botón en el encabezado de la tarjeta */
+/* Botón en el encabezado de la card */
 .recommendation-card .card-header button {
-  font-size: 0.5em; /* Reducir un poco el tamaño de la fuente */
+  font-size: 0.5em; 
   margin-top: 10px;
   display: block;
   width: 100%;
   text-align: center;
   max-width: 150px;
-  white-space: normal; /* Permitir que el texto se divida en líneas */
+  white-space: normal; /* Para q el texto se divida en líneas */
   padding: 10px; 
-  background-color: #FFE87C; /* Fondo amarillo para que coincida con el hover de la card */
-  color: black; /* Cambiar el color del texto para que sea legible sobre el fondo amarillo */
-  border: none; /* Opcional: eliminar el borde si no es necesario */
+  background-color: #FFE87C; /* Fondo amarillo para q coincida con el hover de la card */
+  color: black; /* Esto para q sea legible sobre el fondo amarillo */
+  border: none; 
   transition: background-color 0.3s ease-in-out;
 }
 .recommendation-card .card-header button:hover {
@@ -399,16 +399,16 @@ footer a {
 
 .recommendation-card .card-details .details p {
   margin: 0.5em 0;
-  font-size: 0.9em; /* Ajusta el tamaño del texto de los detalles */
+  font-size: 0.9em; 
   line-height: 1.4em;
-  max-height: 4.2em; /* Limita la altura de los párrafos */
+  max-height: 4.2em; /* Asi puedo limitar la altura de los párrafos */
   overflow: hidden;
-  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+  text-overflow: ellipsis; /* Agrego puntos suspensivos si el texto es demasiado largo */
 }
 
-/* Pie de la tarjeta */
+/* Footer de la card */
 .recommendation-card .card-footer {
-  margin-top: auto; /* Asegura que el footer esté en la parte inferior */
+  margin-top: auto; 
 }
 
 .wizard-step {
@@ -420,8 +420,8 @@ footer a {
   margin-bottom: 20px;
   position: relative;
   text-align: center;
-  display: inline-block; /* Ajusta el ancho al contenido */
-  padding: 10px 20px; /* Añade un poco de espacio alrededor del texto */
+  display: inline-block; 
+  padding: 10px 20px; 
 
 }
 
@@ -463,7 +463,7 @@ footer a {
   color: var(--c-color);
   background-color: transparent !important;
   box-shadow: none !important;
-  touch-action: manipulation; /* Mejora la manipulación táctil */
+  touch-action: manipulation; /* Xra mejorar la manipulación táctil (estos css son de uiverse) */
   -webkit-tap-highlight-color: transparent; /* Elimina el color de resaltado al tocar el botón en dispositivos móviles */
 }
 
@@ -736,10 +736,10 @@ footer a {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px; /* Añadir espacio entre los botones */
+  gap: 20px; 
 }
 
-/* Asegurar que los botones ocupen 1/3 del ancho disponible menos el margen */
+
 .wizard-options.wizard-genres .uiverse {
   flex: 1 1 calc(33.33% - 40px);
   max-width: 200px;
@@ -748,7 +748,7 @@ footer a {
 
 /* Botones de navegación */
 .btn-nav {
-  padding: 12px 20px; /* Ajusta el padding horizontal */
+  padding: 12px 20px; /* Xra el padding horizontal */
   min-width: 160px;
   height: 52px;
   cursor: pointer;
@@ -767,7 +767,7 @@ footer a {
 
 @media (max-width: 768px) {
   .btn-nav {
-    width: 100%; /* Asegura que el botón ocupe el ancho del contenedor */
+    width: 100%; /* Xra q el botón ocupe el ancho del contenedor */
     padding: 12px 20px;
     margin-right: 0;
     margin-bottom: 10px;
@@ -813,7 +813,7 @@ footer a {
   top: 0;
 }
 
-/* Centrando los botones en wizard-options */
+/* Centro los botones en wizard-options */
 .wizard-options.align-center {
   display: flex;
   flex-wrap: wrap;
@@ -830,8 +830,8 @@ footer a {
 }
 
 .input {
-  width: 300px; /* Hacer el input más ancho */
-  height: 40px; /* Ajustar la altura del input */
+  width: 300px; 
+  height: 40px; 
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #ccc;
@@ -841,7 +841,7 @@ footer a {
 /* Espacio entre las opciones y los botones de navegación */
 @media (max-width: 768px) {
   .btn-nav {
-    width: 100%; /* Asegura que el botón ocupe el ancho del contenedor */
+    width: 100%; /* Xra q el botón ocupe el ancho del contenedor */
     padding: 12px 20px;
     margin-right: 0;
     margin-bottom: 10px;
@@ -852,13 +852,12 @@ footer a {
 .wizard-navigation {
   margin-top: 40px;
   display: flex;
-  flex-wrap: wrap; /* Permite que los botones se distribuyan en varias líneas si es necesario */
+  flex-wrap: wrap; /* Xra que los botones se distribuyan en varias líneas  */
   justify-content: center;
   gap: 20px;
   width: 100%;
 }
 
-/* Título de la sección de Favoritos */
 /* Título de la sección de Favoritos */
 .favorites-title {
   font-size: 28px;

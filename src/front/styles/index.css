@@ -940,3 +940,9 @@ footer a {
   background-color: #ffffff;
   color: #000000;
 }
+
+button.uiverse.active {
+  background-color: #ffc107 !important; /* Important xra evitar interferencias */
+  color: white !important; 
+  border-color: #ffc107 !important; 
+}

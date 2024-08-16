@@ -108,20 +108,20 @@ export const RecommendationWizard = () => {
         <div className="wizard-step">
           <h2 className="wizard-question">¿Qué género te gusta?</h2>
           <div className="wizard-options wizard-genres">
-            {['Acción', 'Comedia', 'Drama', 'Terror', 'Romance', 'Ciencia Ficción', 'Anime', 'Infantil'].map((genre) => (
-              <button
-                key={genre}
-                className={`uiverse ${preferences.genres.includes(genre) ? 'active' : ''}`}
-                onClick={() => handleGenreChange(genre)}
-              >
-                <div className="wrapper">
-                  <span>{genre}</span>
-                  {[...Array(12).keys()].map((i) => (
-                    <div key={i} className={`circle circle-${i + 1}`}></div>
-                  ))}
-                </div>
-              </button>
-            ))}
+          {['Acción', 'Comedia', 'Drama', 'Terror', 'Romance', 'Ciencia Ficción', 'Anime', 'Infantil'].map((genre) => (
+  <button
+    key={genre}
+    className={`uiverse ${preferences.genres.includes(genre) ? 'active' : ''}`}
+    onClick={() => handleGenreChange(genre)}
+  >
+    <div className="wrapper">
+      <span>{genre}</span>
+      {[...Array(12).keys()].map((i) => (
+        <div key={i} className={`circle circle-${i + 1}`}></div>
+      ))}
+    </div>
+  </button>
+))}
           </div>
           <div className="wizard-navigation">
             <button className="btn-nav" onClick={prevStep}>Atrás</button>

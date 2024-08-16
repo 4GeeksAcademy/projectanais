@@ -16,7 +16,7 @@ export const Favorites = () => {
       const newPosters = {};
       for (const favorite of store.favorites) {
         const poster = await actions.fetchPosterFromTMDb(favorite.title);
-        newPosters[favorite.title] = poster || favorite.poster_url;  // Usa el póster de TMDb o el original si no se encuentra
+        newPosters[favorite.title] = poster || favorite.poster_url;  // Esto pa usar el póster de TMDb o el original si no se encuentra
       }
       setPosters(newPosters);
     };

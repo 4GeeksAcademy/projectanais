@@ -75,8 +75,8 @@ export const Recommendations = () => {
     const fetchAllPosters = async () => {
       const newPosters = {};
       for (const rec of recommendations) {
-        const poster = await fetchPosterFromTMDb(rec.title); // Aquí usamos la función fetchPosterFromTMDb
-        newPosters[rec.title] = poster || rec.poster_url;  // Usa el póster de TMDb o el original si no se encuentra
+        const poster = await fetchPosterFromTMDb(rec.title); // Aquí uso la función fetchPosterFromTMDb
+        newPosters[rec.title] = poster || rec.poster_url;  // Lo del poster por si no lo encuentra
       }
       setPosters(newPosters);
     };
@@ -84,7 +84,7 @@ export const Recommendations = () => {
   }, [recommendations]);
 
   return (
-    <div className="recommendations-container mt-5">
+    <div className="recommendations-container mt-5 mb-5">
       <h1 className="recommendations-title mb-4 text-center">Recomendaciones</h1>
       <p className="text-center text-light">Según tus preferencias, te recomendamos:</p>
       {recommendations.length > 0 ? (

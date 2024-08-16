@@ -7,7 +7,7 @@ export const Navbar = () => {
 
   return (
 <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
-  <div className="container-fluid px-3"> {/* Añadir `px-3` para padding horizontal */}
+  <div className="container-fluid px-3"> {/* El `px-3` es el horizontal!!! */}
     <Link to="/" className="navbar-brand">IANA</Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
@@ -36,7 +36,7 @@ export const Navbar = () => {
         ) : (
           <li className="nav-item dropdown">
             <button className="btn btn-link nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i className="fas fa-user"></i> {/* Icono de usuario */}
+              <i className="fas fa-user"></i> 
             </button>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li><Link to="/favorites" className="dropdown-item">Favoritos</Link></li>

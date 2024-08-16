@@ -38,7 +38,7 @@ export const RecommendationWizard = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       {step === 1 && (
         <div className="wizard-step">
           <h2 className="wizard-question">¿Qué te gustaría ver hoy?</h2>

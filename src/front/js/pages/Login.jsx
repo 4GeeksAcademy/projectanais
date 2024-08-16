@@ -60,14 +60,14 @@ const Login = () => {
             value={password} 
             onChange={handlePasswordChange} 
           />
-          <Link to="/reset-password">Forgot your password?</Link>
+          <Link to="/reset-password">Olvidaste tu contraseña?</Link>
           <button type="submit" className="form-btn">Log In</button>
         </form>
       </div>
       <div className="overlay-container">
         <div className="overlay-panel">
-          <h1>Hello, Friend!</h1>
-          <p>Enter your personal details and start your journey with us</p>
+          <h1>¡Hola!</h1>
+          <p>Ingresa tus datos personales y comienza tu aventura con nosotros</p>
           <button className="ghost" onClick={() => navigate('/signup')}>Sign Up</button>
         </div>
       </div>

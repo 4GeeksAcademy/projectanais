@@ -2,13 +2,13 @@ import React from 'react';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="container mt-5">
-      <h1>Política de Privacidad</h1>
+    <div className="container mt-5 text-light mb-5" >
+      <h1 className="text-center mb-4">Política de Privacidad</h1>
       <p>
         En IANA, valoramos tu privacidad y nos comprometemos a proteger tu información personal. Esta política de privacidad describe cómo recopilamos, utilizamos y compartimos tu información cuando utilizas nuestro sitio web y servicios.
       </p>
 
-      <h2>Información que Recopilamos</h2>
+      <h2 className="mt-4">Información que Recopilamos</h2>
       <p>
         Recopilamos varios tipos de información en relación con tu uso de nuestros servicios:
       </p>
@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
         </li>
       </ul>
 
-      <h2>Cómo Utilizamos tu Información</h2>
+      <h2 className="mt-4">Cómo Utilizamos tu Información</h2>
       <p>
         Utilizamos la información recopilada para los siguientes fines:
       </p>
@@ -43,7 +43,7 @@ const PrivacyPolicy = () => {
         </li>
       </ul>
 
-      <h2>Cómo Compartimos tu Información</h2>
+      <h2 className="mt-4">Cómo Compartimos tu Información</h2>
       <p>
         No compartimos tu información personal con terceros, excepto en las siguientes circunstancias:
       </p>
@@ -59,29 +59,29 @@ const PrivacyPolicy = () => {
         </li>
       </ul>
 
-      <h2>Tus Derechos</h2>
+      <h2 className="mt-4">Tus Derechos</h2>
       <p>
         Tienes derecho a acceder, corregir, actualizar o eliminar tu información personal. Para ejercer estos derechos, por favor contáctanos a través de los datos de contacto proporcionados en nuestro sitio web.
       </p>
 
-      <h2>Seguridad</h2>
+      <h2 className="mt-4">Seguridad</h2>
       <p>
         Implementamos medidas de seguridad razonables para proteger tu información personal. Sin embargo, no se puede garantizar que la transmisión de datos por Internet o el sistema de almacenamiento sean 100% seguros.
       </p>
 
-      <h2>Enlaces a Otros Sitios Web</h2>
+      <h2 className="mt-4">Enlaces a Otros Sitios Web</h2>
       <p>
         Nuestro sitio web puede contener enlaces a otros sitios que no operamos. No somos responsables de las prácticas de privacidad de estos sitios y te recomendamos revisar sus políticas de privacidad.
       </p>
 
-      <h2>Actualizaciones a esta Política de Privacidad</h2>
+      <h2 className="mt-4">Actualizaciones a esta Política de Privacidad</h2>
       <p>
         Podemos actualizar esta política de privacidad de vez en cuando. Publicaremos cualquier cambio en esta página y te notificaremos si los cambios son significativos.
       </p>
 
-      <h2>Contacto</h2>
+      <h2 className="mt-4">Contacto</h2>
       <p>
-        Si tienes alguna pregunta o inquietud sobre esta política de privacidad, por favor contáctanos a través de <a href="mailto:contact@iana.com">contact@iana.com</a>.
+        Si tienes alguna pregunta o inquietud sobre esta política de privacidad, por favor contáctanos a través de <a href="mailto:contact@iana.com" className="text-warning">contact@iana.com</a>.
       </p>
     </div>
   );

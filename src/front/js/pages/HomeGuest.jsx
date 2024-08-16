@@ -6,7 +6,7 @@ export const HomeGuest = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Reemplaza con tu clave de API de TMDb
+      const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Es gratis de momento mas facil asi 
       const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=es-ES`;
       try {
         const response = await fetch(url);
@@ -29,7 +29,7 @@ export const HomeGuest = () => {
           Deja que te guiemos hacia tus próximas películas y series favoritas.
           <br />
           Explora recomendaciones hechas justo para ti.
-        </p>        <Link to="/signup" className="btn btn-transparent">Sign Up</Link> {/* Botón en color amarillo */}
+        </p>        <Link to="/signup" className="btn btn-transparent">Sign Up</Link> 
       </div>
 
       {/* Sección de Películas en Tendencia */}

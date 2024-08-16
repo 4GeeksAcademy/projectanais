@@ -53,6 +53,7 @@ export const Signup = () => {
           />
           <input
             type="password"
+            className="mb-3"
             placeholder="Password"
             value={password}
             onChange={handlePasswordChange}

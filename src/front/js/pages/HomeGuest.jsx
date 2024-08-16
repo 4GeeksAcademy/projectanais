@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 
 export const HomeGuest = () => {
   const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Es gratis de momento mas facil asi 
+      const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Es gratis de momento más fácil así 
       const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=es-ES`;
-      try {
-        const response = await fetch(url);
+
+      const response = await fetch(url);
+      if (response.ok) {
         const data = await response.json();
         setMovies(data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
+      } else {
+        setError('Error fetching movies');
       }
     };
 
@@ -22,21 +24,23 @@ export const HomeGuest = () => {
 
   return (
     <div className="container-fluid p-0">
-      {/* Sección de Bienvenida */}
+      {/* Sección primera de Bienvenida */}
       <div className="text-center text-light bg-dark py-5 welcome-section">
         <h1 className="display-4 mb-3">Te damos la bienvenida</h1>
         <p className="lead mb-4">
           Deja que te guiemos hacia tus próximas películas y series favoritas.
           <br />
           Explora recomendaciones hechas justo para ti.
-        </p>        <Link to="/signup" className="btn btn-transparent">Sign Up</Link> 
+        </p>
+        <Link to="/signup" className="btn btn-transparent">Sign Up</Link>
       </div>
 
       {/* Sección de Películas en Tendencia */}
       <div className="container my-5">
+        {error && <p className="text-danger text-center">{error}</p>}
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-          {movies.map((movie, index) => (
-            <div key={index} className="col">
+          {movies.map((movie) => (
+            <div key={movie.id} className="col">
               <div className="card bg-dark text-white h-100">
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}

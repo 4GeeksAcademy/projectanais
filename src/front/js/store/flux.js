@@ -119,102 +119,90 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ isLoggedIn: false });
 				localStorage.removeItem('token');
 				sessionStorage.removeItem('token');
-				window.location.href = "/"; // Redirigir a la página de inicio
+				window.location.href = "/"; // Redirijo a la página de inicio
 			},
 
-			 addFavorite: async (favoriteData) => {
+			addFavorite: async (favoriteData) => {
 				const store = getStore();
 			
-				// Verificar si el token está en el store
 				if (!store.token) {
-					console.error("Token is missing in the store.");
+					console.error("Token missing en el stoer.");
 					return;
 				}
 			
 				console.log("Data to send:", favoriteData);
-				console.log("JWT Token:", store.token); // Verificar si el token es el correcto
+				console.log("JWT Token:", store.token);
 			
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${store.token}`
-						},
-						body: JSON.stringify(favoriteData)
-					});
+				const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${store.token}`
+					},
+					body: JSON.stringify(favoriteData)
+				});
 			
-					if (!response.ok) {
-						const errorData = await response.json();
-						console.error("Error adding favorite:", response.status, response.statusText, errorData);
-					} else {
-						const data = await response.json();
-						setStore({
-							favorites: [...store.favorites, data]
-						});
-						console.log("Favorite added successfully:", data);
-					}
-				} catch (error) {
-					console.error("Network or server error:", error);
+				if (!response.ok) {
+					const errorData = await response.json();
+					console.error("Error al añadir favorite:", response.status, response.statusText, errorData);
+					return;
 				}
+			
+				const data = await response.json();
+				setStore({
+					favorites: [...store.favorites, data]
+				});
+				console.log("Favorite añadido successfully:", data);
 			},
 			getFavorites: async () => {
 				const store = getStore();
 				
 				if (!store.token || store.token.split('.').length !== 3) {
-					console.error("Invalid JWT Token:", store.token); // Verifica el token aquí
+					console.error("Invalid JWT Token:", store.token);
 					return;
 				}
 			
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${store.token}`,
-						},
-					});
+				const response = await fetch(`${process.env.BACKEND_URL}/api/favorites`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${store.token}`,
+					},
+				});
 			
-					if (!response.ok) {
-						console.error("Error fetching favorites:", response.status, response.statusText);
-						return;
-					}
-			
-					const data = await response.json();
-					setStore({ favorites: data });
-					console.log("Favorites fetched successfully:", data); // Verifica los datos aquí
-			
-				} catch (error) {
-					console.error("Failed to fetch favorites:", error);
+				if (!response.ok) {
+					console.error("Error fetching favoritos:", response.status, response.statusText);
+					return;
 				}
+			
+				const data = await response.json();
+				setStore({ favorites: data });
+				console.log("Favoritos fetched successfully:", data);
 			},
 			  
 			deleteFavorite: async (id) => {
 				const store = getStore();
 			
 				if (!store.token) {
-					console.error("Token is missing in the store.");
+					console.error("Token missing en el store.");
 					return;
 				}
 			
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/favorites/${id}`, {
-						method: "DELETE",
-						headers: {
-							"Authorization": `Bearer ${store.token}`
-						}
-					});
-			
-					if (!response.ok) {
-						console.error("Error deleting favorite:", response.status, response.statusText);
-					} else {
-						const updatedFavorites = store.favorites.filter(favorite => favorite.id !== id);
-						setStore({ favorites: updatedFavorites });
-						console.log("Favorite deleted successfully.");
+				const response = await fetch(`${process.env.BACKEND_URL}/api/favorites/${id}`, {
+					method: "DELETE",
+					headers: {
+						"Authorization": `Bearer ${store.token}`
 					}
-				} catch (error) {
-					console.error("Network or server error:", error);
+				});
+			
+				if (!response.ok) {
+					console.error("Error al eliminar fav:", response.status, response.statusText);
+					return;
 				}
+			
+				const updatedFavorites = store.favorites.filter(favorite => favorite.id !== id);
+				setStore({ favorites: updatedFavorites });
+				console.log("Favorito eliminado correctamente.");
 			},
 
 			getRecommendations: async (prompt, exclude = []) => {
@@ -249,22 +237,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return newRecommendations;
 			  },
 			  fetchPosterFromTMDb: async (title) => {
-                const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; 
-                const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
-                try {
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    if (data.results && data.results.length > 0) {
-                        const posterPath = data.results[0].poster_path;
-                        return `https://image.tmdb.org/t/p/w500${posterPath}`;
-                    } else {
-                        return null;
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch poster from TMDb:", error);
-                    return null;
-                }
-            },
+				const apiKey = '26d0b6690b6ca551bd0a22504613e5a9';
+				const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
+			
+				const response = await fetch(url);
+				if (response.ok) {
+					const data = await response.json();
+					if (data.results && data.results.length > 0) {
+						const posterPath = data.results[0].poster_path;
+						return `https://image.tmdb.org/t/p/w500${posterPath}`;
+					} else {
+						return null;
+					}
+				} else {
+					console.error("Failed to fetch poster from TMDb: Response not OK");
+					return null;
+				}
+			},
 		}
 	};
 };

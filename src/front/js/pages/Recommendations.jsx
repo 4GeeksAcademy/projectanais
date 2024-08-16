@@ -2,21 +2,24 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 
-// Función para obtener el póster desde TMDb
+// Función para obtener las fotos desde TMDb
 const fetchPosterFromTMDb = async (title) => {
-  const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; // Asegúrate de reemplazar esto con tu clave de TMDb
+  const apiKey = '26d0b6690b6ca551bd0a22504613e5a9'; 
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data.results && data.results.length > 0) {
-      const posterPath = data.results[0].poster_path;
-      return `https://image.tmdb.org/t/p/w500${posterPath}`;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Failed to fetch poster from TMDb:", error);
+  
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    console.error("Failed to fetch poster from TMDb:", response.statusText);
+    return null;
+  }
+  
+  const data = await response.json();
+  
+  if (data.results && data.results.length > 0) {
+    const posterPath = data.results[0].poster_path;
+    return `https://image.tmdb.org/t/p/w500${posterPath}`;
+  } else {
     return null;
   }
 };
@@ -27,7 +30,7 @@ export const Recommendations = () => {
   const navigate = useNavigate();
   const { recommendations } = location.state || { recommendations: [] };
   const [hoveredTitle, setHoveredTitle] = useState(null);
-  const [posters, setPosters] = useState({}); // Estado para guardar los posters
+  const [posters, setPosters] = useState({}); 
 
   const isFavorite = (title) => {
     return store.favorites.some(favorite => favorite.title === title);
@@ -49,25 +52,32 @@ export const Recommendations = () => {
       return;
     }
 
-    try {
-      if (isFavorite(recommendation.title)) {
-        const favorite = store.favorites.find(fav => fav.title === recommendation.title);
-        await actions.deleteFavorite(favorite.id);
-      } else {
-        await actions.addFavorite(favoriteData);
+    const favorite = isFavorite(recommendation.title)
+      ? store.favorites.find(fav => fav.title === recommendation.title)
+      : null;
+
+    if (favorite) {
+      const deleteResponse = await actions.deleteFavorite(favorite.id);
+      if (!deleteResponse) {
+        console.error("Failed to delete favorite");
+        return;
       }
-      console.log("Favorite added or removed successfully.");
-    } catch (error) {
-      console.error("Failed to add or remove favorite:", error);
+    } else {
+      const addResponse = await actions.addFavorite(favoriteData);
+      if (!addResponse) {
+        console.error("Failed to add favorite");
+        return;
+      }
     }
+
+    console.log("Favorite added or removed successfully.");
   };
 
   const handleAlternativeRecommendations = async () => {
-    try {
-      const newRecommendations = await actions.getRecommendations("dame más recomendaciones", Array.from(store.viewedRecommendations));
+    const newRecommendations = await actions.getRecommendations("dame más recomendaciones similares y evita repetir", Array.from(store.viewedRecommendations));
+
+    if (newRecommendations) {
       navigate('/recommendations', { state: { recommendations: newRecommendations } });
-    } catch (error) {
-      console.error("Failed to fetch alternative recommendations:", error);
     }
   };
 
@@ -75,7 +85,7 @@ export const Recommendations = () => {
     const fetchAllPosters = async () => {
       const newPosters = {};
       for (const rec of recommendations) {
-        const poster = await fetchPosterFromTMDb(rec.title); // Aquí uso la función fetchPosterFromTMDb
+        const poster = await fetchPosterFromTMDb(rec.title); 
         newPosters[rec.title] = poster || rec.poster_url;  // Lo del poster por si no lo encuentra
       }
       setPosters(newPosters);

@@ -100,13 +100,13 @@ const Auth = () => {
       <div className="overlay-container">
         <div className="overlay">
           <div className="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>To keep connected with us please login with your personal info</p>
+            <h1>¡Hola de nuevo!</h1>
+            <p>Ingresa tus datos personales y accede a tu cuenta.</p>
             <button className="ghost" id="signIn" onClick={() => navigate('/login')}>Log In</button>
           </div>
           <div className="overlay-panel overlay-right">
             <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start your journey with us</p>
+            <p>Ingresa tus datos personales y comienza tu aventura con nosotros.</p>
             <button className="ghost" id="signUp" onClick={() => navigate('/signup')}>Sign Up</button>
           </div>
         </div>

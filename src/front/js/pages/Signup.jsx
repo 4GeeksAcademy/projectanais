@@ -21,7 +21,7 @@ export const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isFormValid()) {
-      setError("Please fill in all fields.");
+      setError("Por favor, rellene todos los campos.");
       return;
     }
 
@@ -43,7 +43,7 @@ export const Signup = () => {
     <div className="auth-container">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h1>Create Account</h1>
+          <h1>Crea tu Cuenta</h1>
           {error && <div className="alert alert-danger" role="alert">{error}</div>}
           <input
             type="email"
@@ -62,8 +62,8 @@ export const Signup = () => {
       </div>
       <div className="overlay-container">
         <div className="overlay-panel">
-          <h1>Welcome Back!</h1>
-          <p>To keep connected with us please login with your personal info</p>
+          <h1>¡Hola de nuevo!</h1>
+          <p>Ingresa tus datos personales y accede a tu cuenta.</p>
           <button className="ghost" onClick={() => navigate('/login')}>Log In</button>
         </div>
       </div>

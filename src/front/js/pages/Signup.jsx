@@ -43,7 +43,7 @@ export const Signup = () => {
     <div className="auth-container">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h1>Crea tu Cuenta</h1>
+          <h1 className="mb-2">Crea tu Cuenta</h1>
           {error && <div className="alert alert-danger" role="alert">{error}</div>}
           <input
             type="email"

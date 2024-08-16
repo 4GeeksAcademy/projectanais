@@ -46,7 +46,7 @@ const Login = () => {
     <div className="auth-container">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h1>Log in</h1>
+          <h1 className="mb-2">Log in</h1>
           {error && <div className="alert alert-danger" role="alert">{error}</div>}
           <input 
             type="email" 
@@ -60,8 +60,8 @@ const Login = () => {
             value={password} 
             onChange={handlePasswordChange} 
           />
-          <Link to="/reset-password">Olvidaste tu contraseña?</Link>
-          <button type="submit" className="form-btn">Log In</button>
+          {/* <Link to="/reset-password">Olvidaste tu contraseña?</Link> No me sale:( */}
+          <button type="submit" className="form-btn mt-3">Log In</button>
         </form>
       </div>
       <div className="overlay-container">

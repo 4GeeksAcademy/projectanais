@@ -10,20 +10,20 @@ const PasswordResetRequest = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const message = await actions.requestPasswordReset(email);
-        if (message) {
+        if (message === "Se ha enviado un enlace de restablecimiento de contraseña a tu correo electrónico") {
             alert(message);
-            navigate('/login'); // Navega a la página de login si el mensaje es exitoso
+            navigate('/login'); 
         } else {
-            alert('Something went wrong, please try again.');
+            alert(message);
         }
     };
 
     return (
         <div className="container mt-5">
-            <h2>Reset Your Password</h2>
+            <h2>Restablece tu contraseña</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="emailInput">Email address</label>
+                    <label htmlFor="emailInput">Dirección de correo electrónico</label>
                     <input
                         type="email"
                         className="form-control"
@@ -32,12 +32,15 @@ const PasswordResetRequest = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                    <button type="submit" className="btn btn-primary mt-3">Send Reset Link</button>
+                    <button type="submit" className="btn btn-primary mt-3">Enviar enlace de restablecimiento</button>
                 </div>
             </form>
-            <Link to="/login" className="btn btn-link">Back to login</Link>
+            <Link to="/login" className="btn btn-link">Volver a iniciar sesión</Link>
         </div>
     );
 };
 
 export default PasswordResetRequest;
+
+
+// Esto no lo he conseguido sacar

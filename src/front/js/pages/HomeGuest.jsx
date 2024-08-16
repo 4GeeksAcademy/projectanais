@@ -24,9 +24,12 @@ export const HomeGuest = () => {
     <div className="container-fluid p-0">
       {/* Sección de Bienvenida */}
       <div className="text-center text-light bg-dark py-5 welcome-section">
-        <h1 className="display-4 mb-3">Te damos la bienvenida.</h1>
-        <p className="lead mb-4">Deja que te guiemos hacia tus próximas películas y series favoritas. Explora recomendaciones hechas justo para ti.</p>
-        <Link to="/signup" className="btn btn-warning btn-lg">Sign Up</Link> {/* Botón en color amarillo */}
+        <h1 className="display-4 mb-3">Te damos la bienvenida</h1>
+        <p className="lead mb-4">
+          Deja que te guiemos hacia tus próximas películas y series favoritas.
+          <br />
+          Explora recomendaciones hechas justo para ti.
+        </p>        <Link to="/signup" className="btn btn-transparent">Sign Up</Link> {/* Botón en color amarillo */}
       </div>
 
       {/* Sección de Películas en Tendencia */}
@@ -53,16 +56,16 @@ export const HomeGuest = () => {
 
       {/* Sección de Recomendaciones Personalizadas */}
       <div className="bg-dark text-center text-light py-5 perso-section">
-      <h2 className="mb-3">Descubre tus próximas películas y series favoritas sin esfuerzo</h2>
-      <p className="lead">Regístrate para recibir recomendaciones personalizadas basadas en tus preferencias.</p>
-        <Link to="/signup" className="btn btn-warning btn-lg">Descubre tus recomendaciones</Link>
+        <h2 className="mb-3">Descubre tus próximas películas y series favoritas sin esfuerzo</h2>
+        <p className="lead">Regístrate para recibir recomendaciones personalizadas basadas en tus preferencias.</p>
+        <Link to="/signup" className="btn btn-transparent">Descubre tus recomendaciones</Link>
       </div>
 
       {/* Sección de Llamada a la Acción Final */}
-      <div className="text-center text-light bg-dark py-5">
+      <div className="text-center text-light bg-dark py-5 end-section">
         <h2 className="mb-3">¿Listo para empezar?</h2>
         <p className="lead">Únete a nuestra comunidad y descubre contenido increíble.</p>
-        <Link to="/signup" className="btn btn-danger btn-lg">Sign Up</Link>
+        <Link to="/signup" className="btn btn-transparent">Sign Up</Link>
       </div>
     </div>
   );

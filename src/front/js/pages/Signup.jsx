@@ -58,7 +58,7 @@ export const Signup = () => {
             value={password}
             onChange={handlePasswordChange}
           />
-          <button type="submit">Sign Up</button>
+          <button type="submit" className="form-btn">Sign Up</button>
         </form>
       </div>
       <div className="overlay-container">

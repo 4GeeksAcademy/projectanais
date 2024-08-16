@@ -111,12 +111,38 @@ input {
 }
 
 .overlay-container {
-  background: #FF416C;
-  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
+  background: linear-gradient(to right, #1f2860, #a175c4); /* Cambiado el color del fondo */
   color: #FFFFFF;
   text-align: center;
 }
+
+/* Botón principal en el formulario con degradado */
+button.form-btn {
+  background-image: linear-gradient(to right, #1f2860, #a175c4); /* Aplicar el degradado */
+  border: none; /* Sin borde adicional */
+  color: #ffffff;
+  padding: 12px 45px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  transition: transform 80ms ease-in, background-color 0.3s ease;
+}
+
+button.form-btn:hover {
+  background-color: #1f2860; /* Fondo sólido en el hover */
+  color: #ffffff;
+}
+
+button:active, .btn-transparent:active {
+  transform: scale(0.95);
+}
+
+button:focus, .btn-transparent:focus {
+  outline: none;
+}
+
 
 .overlay-panel {
   display: flex;
@@ -868,11 +894,49 @@ footer a {
   gap: 20px;
 }
 
-.welcome-section {
-  background: linear-gradient(135deg, #3c47a4, #f25e5e); /* Aqui hago el degradado */
+/* Estilos generales */
+.section {
+  padding: 80px 20px;
+  text-align: center;
 }
 
-.perso-section {
-  background: linear-gradient(135deg, #3c47a4, #f25e5e); /* Aqui hago el degradado */
+/* Fondo personalizado para secciones */
+.welcome-section, .end-section {
+  background: linear-gradient(to bottom, #1f2860, #a175c4);
+}
 
+/* Estilos para los encabezados */
+.section h1, .section h2 {
+  font-family: "Graphik Web", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  letter-spacing: -0.2px;
+}
+
+/* Estilos para los párrafos */
+.section p {
+  font-family: "Graphik Web", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 30px;
+}
+
+/* Botón transparente con borde blanco */
+.btn-transparent {
+  color: #ffffff;
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  padding: 10px 30px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.btn-transparent:hover {
+  background-color: #ffffff;
+  color: #000000;
 }

@@ -157,34 +157,45 @@ def handle_user(user_id):
         response_body['message'] = 'Usuario inexistente'
         response_body['results'] = {}
         return response_body, 404
+
     if request.method == 'PUT':
         data = request.json
-        # Rutina de validacion de datos recibidos TODO
-        print(data)
         user = db.session.execute(db.select(Users).where(Users.id == user_id)).scalar()
         if user:
             user.email = data['email']
             user.is_active = data['is_active']
             user.last_name = data['last_name']
             user.first_name = data['first_name']
-            db.session.commit()  # Esto hace commit de los datos y los actualiza en la lista, para que se grabe en la base
+            db.session.commit()
             response_body['message'] = 'User updated'
             response_body['results'] = user.serialize()
             return response_body, 200
         response_body['message'] = 'Usuario inexistente'
         response_body['results'] = {}
         return response_body, 404
+
     if request.method == 'DELETE':
         user = db.session.execute(db.select(Users).where(Users.id == user_id)).scalar()
         if user:
-            # db.session.delete(user)
-            user.is_active = False
+            # Eliminar todos los favoritos asociados al usuario
+            Favorites.query.filter_by(user_id=user_id).delete()
             db.session.commit()
-            response_body['message'] = 'Usuario eliminado'
+
+            # Opción 1: Eliminar el usuario completamente
+            db.session.delete(user)
+            db.session.commit()
+
+            # Opción 2: Marcar el usuario como inactivo (esto ya lo tienes)
+            # user.is_active = False
+            # db.session.commit()
+
+            response_body['message'] = 'Usuario eliminado y favoritos eliminados'
             response_body['results'] = {}
+            return response_body, 200
+
         response_body['message'] = 'Usuario inexistente'
         response_body['results'] = {}
-        return response_body, 200
+        return response_body, 404
 
 
 

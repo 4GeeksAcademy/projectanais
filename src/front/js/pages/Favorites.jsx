@@ -25,7 +25,7 @@ export const Favorites = () => {
   }, [store.token, store.favorites]);
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <h1 className="text-center text-light">Mis Favoritos</h1>
       <div className="row flex-nowrap overflow-auto">
         {store.favorites.length > 0 ? (

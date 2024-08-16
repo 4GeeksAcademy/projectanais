@@ -61,7 +61,7 @@ const Login = () => {
             onChange={handlePasswordChange} 
           />
           <Link to="/reset-password">Forgot your password?</Link>
-          <button type="submit">Log In</button>
+          <button type="submit" className="form-btn">Log In</button>
         </form>
       </div>
       <div className="overlay-container">

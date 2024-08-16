@@ -10,6 +10,7 @@ class Users(db.Model):
     is_admin = db.Column(db.Boolean(), unique=False, nullable=True)
     first_name = db.Column(db.String(), unique=False, nullable=True)
     last_name = db.Column(db.String(), unique=False, nullable=True)
+    favorites = db.relationship('Favorites', back_populates='user', cascade='all, delete-orphan', lazy=True)
 
     def __repr__(self):
         return f'<User {self.id} - {self.email}>'
@@ -28,7 +29,7 @@ class Users(db.Model):
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('Users', backref=db.backref('favorites', lazy=True))
+    user = db.relationship('Users', back_populates='favorites')
     title = db.Column(db.String(120), nullable=False)
     imdb_rating = db.Column(db.String(10))
     platforms = db.Column(db.String(120))

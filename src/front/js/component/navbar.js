@@ -40,7 +40,6 @@ export const Navbar = () => {
             </button>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li><Link to="/favorites" className="dropdown-item">Favoritos</Link></li>
-              <li><Link to="/edit-profile" className="dropdown-item">Editar Perfil</Link></li>
               <li><button className="dropdown-item" onClick={actions.logout}>Logout</button></li>
             </ul>
           </li>
